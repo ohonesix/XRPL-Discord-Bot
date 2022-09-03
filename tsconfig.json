@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "target": "es6",
+    "moduleResolution": "node",
+    "preserveConstEnums": true,
+    "outDir": "dist",
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "skipLibCheck": true,
+    "sourceMap": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "node_modules/**/*.ts", "**/*.spec.ts"]
+}
