@@ -1,13 +1,12 @@
 import { getTradingDetails } from '../integration/sologenic/getTradingDetails.js';
 import truncate from '../utils/truncate.js';
-
-const SOLOGENIC_API_INPUT_OUTPUT_FORMAT = 'todo';
+import SETTINGS from '../settings.js';
 
 const getPrice = async (): Promise<string> => {
-  const details = await getTradingDetails(SOLOGENIC_API_INPUT_OUTPUT_FORMAT);
+  const details = await getTradingDetails(SETTINGS.SOLOGENIC.FORMATTED_TOKEN);
 
   if (!details || !details.price || !details.volume) {
-    return `Something went wrong getting the details from Sologenic, try 👉 https://sologenic.org/trade?market=${SOLOGENIC_API_INPUT_OUTPUT_FORMAT}&network=mainnet`;
+    return `Something went wrong getting the details from Sologenic, try 👉 https://sologenic.org/trade?market=${SETTINGS.SOLOGENIC.FORMATTED_TOKEN}&network=mainnet`;
   }
 
   return `Last traded price: ${truncate(

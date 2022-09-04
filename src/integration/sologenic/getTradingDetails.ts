@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const SOLOGENIC_API_URL = 'https://api.sologenic.org/api/v1/tickers/24h';
+import SETTINGS from '../../settings';
 
 const getTradingDetails = async (token: string): Promise<any> => {
   const config = {
@@ -22,7 +21,7 @@ const getTradingDetails = async (token: string): Promise<any> => {
   const params = `{"symbols":["${token}"]}`;
 
   const result = await axios
-    .post(SOLOGENIC_API_URL, params, config)
+    .post(SETTINGS.SOLOGENIC.API_URL, params, config)
     .then((response) => {
       if (response.status !== 200) {
         throw new Error();

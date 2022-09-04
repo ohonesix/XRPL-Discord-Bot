@@ -153,10 +153,9 @@ discordClient.login(SETTINGS.DISCORD.BOT_TOKEN);
 
 // Webserver
 const webServer = express();
-const port = process.env.PORT || 5880;
 
 webServer.get('/', async (req, res) => {
-  res.send('fkm');
+  res.send('https://ohonesix.com/xrpl-discord-bot');
 });
 
 webServer.get('/status', async (req, res) => {
@@ -182,6 +181,6 @@ webServer.get('/updateAccounts', async (req, res) => {
   res.send(await scanLinkedAccounts(discordClient, LOGGER));
 });
 
-webServer.listen(port, async () => {
-  console.log(`Listening at http://localhost:${port}`);
+webServer.listen(SETTINGS.APP.PORT, async () => {
+  console.log(`Listening at http://localhost:${SETTINGS.APP.PORT}`);
 });
