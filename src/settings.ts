@@ -1,6 +1,9 @@
 const SETTINGS = {
   APP: {
     PORT: process.env.PORT || 5880,
+    // MAX_WALLETS
+    // How many wallets each user can have at the same time.
+    MAX_WALLETS: process.env.MAX_WALLETS || 1,
   },
   DISCORD: {
     SERVER_ID: process.env.DISCORD_SERVER_ID || 'replace-me',
