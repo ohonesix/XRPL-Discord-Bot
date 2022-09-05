@@ -2,7 +2,7 @@ import SETTINGS from '../settings.js';
 import mongodb from 'mongodb';
 const { MongoClient } = mongodb;
 
-const getWallets = async () => {
+const getAllUsers = async () => {
   const client = await MongoClient.connect(SETTINGS.MONGODB.SERVER_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -10,13 +10,13 @@ const getWallets = async () => {
 
   const db = client.db(SETTINGS.MONGODB.DATABASE_NAME);
 
-  const wallets = await db
+  const wallets = (await db
     .collection(SETTINGS.MONGODB.USERS_TABLE)
     .find({})
-    .toArray();
+    .toArray()) as IBotUser[];
 
   client.close();
   return wallets;
 };
 
-export { getWallets };
+export { getAllUsers };

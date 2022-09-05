@@ -23,9 +23,8 @@ const updateUserWallet = async (
   if (!existingUser) existingUser = user;
 
   if (!skipChecks) {
-    // Check this user hasn't claimed more than 1 wallet
-    // ERR code 2
-    if (existingUser?.wallets?.length >= 1) {
+    // Check this user hasn't claimed more than the max amount
+    if (existingUser?.wallets?.length >= SETTINGS.APP.MAX_WALLETS) {
       client.close();
       return WalletUpdateResponse.ErrorTooManyAccountClaims;
     }
@@ -35,7 +34,6 @@ const updateUserWallet = async (
       .findOne({ wallets: { address: wallet.address } })) as IBotUser;
 
     // Check if the address has been claimed before
-    // ERR code 1
     if (
       existingWalletOwner &&
       existingWalletOwner.discordId !== existingUser.discordId
@@ -50,10 +48,11 @@ const updateUserWallet = async (
     (w) => w.address === wallet.address
   )[0];
   if (existingWallet) {
+    // They do, update the values
     existingWallet.points = wallet.points;
     existingWallet.verified = wallet.verified;
   } else {
-    // Add it
+    // They don't have this wallet, add it
     existingUser.wallets.push(wallet);
   }
 
@@ -64,6 +63,7 @@ const updateUserWallet = async (
         discordId: existingUser.discordId,
         discordUsername: existingUser.discordUsername,
         discordDiscriminator: existingUser.discordDiscriminator,
+        totalPoints: existingUser.totalPoints,
         wallets: existingUser.wallets,
         timestamp: new Date().toISOString(),
       },

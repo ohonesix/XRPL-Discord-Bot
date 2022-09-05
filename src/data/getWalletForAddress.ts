@@ -12,7 +12,7 @@ const getWalletForAddress = async (address: string) => {
 
   const wallet = await db
     .collection(SETTINGS.MONGODB.USERS_TABLE)
-    .findOne({ address });
+    .findOne({ 'wallet.address': address });
 
   client.close();
   return wallet;

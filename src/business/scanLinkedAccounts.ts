@@ -1,25 +1,22 @@
 import sleep from '../utils/sleep.js';
-import { getWallets } from '../data/getWallets.js';
+import { getAllUsers } from '../data/getAllUsers.js';
 import { updateUserAccount } from '../data/updateUserAccount.js';
 import { getUserAccountById } from '../integration/discord/getUserAccountById.js';
 import { Client } from 'discord.js';
 
 const scanLinkedAccounts = async (client: Client, LOGGER: any) => {
   // Get all wallets
-  const linkedWallets = await getWallets();
+  const allUsers = await getAllUsers();
 
   let changes = 0;
   let usersMissing = 0;
-  for (let index = 0; index < linkedWallets.length; index++) {
+  for (let index = 0; index < allUsers.length; index++) {
     await sleep(100);
 
-    const storedLinkedWallet = linkedWallets[index];
+    const storedUser = allUsers[index];
 
     // Get user Discord account
-    const userAccount = await getUserAccountById(
-      storedLinkedWallet.discordId,
-      client
-    );
+    const userAccount = await getUserAccountById(storedUser.discordId, client);
 
     // User might have left the server, nothing to do then
     if (!userAccount?.user?.username) {
@@ -30,17 +27,16 @@ const scanLinkedAccounts = async (client: Client, LOGGER: any) => {
 
     // Update Mongo if changes to username/tag
     if (
-      storedLinkedWallet.discordUsername !== userAccount.user.username ||
-      storedLinkedWallet.discordDiscriminator !== userAccount.user.discriminator
+      storedUser.discordUsername !== userAccount.user.username ||
+      storedUser.discordDiscriminator !== userAccount.user.discriminator
     ) {
       changes = changes + 1;
 
       // Store update in Mongo
       const updateResult = await updateUserAccount(
-        storedLinkedWallet.address,
-        storedLinkedWallet.discordId,
-        storedLinkedWallet.discordUsername,
-        storedLinkedWallet.discordDiscriminator,
+        storedUser.discordId,
+        storedUser.discordUsername,
+        storedUser.discordDiscriminator,
         userAccount.user.username,
         userAccount.user.discriminator
       );
@@ -49,7 +45,7 @@ const scanLinkedAccounts = async (client: Client, LOGGER: any) => {
       if (updateResult !== 0 && LOGGER !== null) {
         LOGGER.trackException({
           exception: new Error(
-            `Something went wrong updating ${storedLinkedWallet.address} name change from ${storedLinkedWallet.discordUsername} to ${userAccount.user.username}`
+            `Something went wrong updating id ${storedUser.discordId} name change from ${storedUser.discordUsername} to ${userAccount.user.username}`
           ),
         });
       }
@@ -63,7 +59,7 @@ const scanLinkedAccounts = async (client: Client, LOGGER: any) => {
       value: usersMissing,
     });
   }
-  return `All done for ${linkedWallets.length} wallets with ${changes} changes and ${usersMissing} missing`;
+  return `All done for ${allUsers.length} users with ${changes} changes and ${usersMissing} missing`;
 };
 
 export { scanLinkedAccounts };

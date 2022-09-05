@@ -51,6 +51,7 @@ const linkWallet = async (
     discordDiscriminator: user.discriminator,
     previousDiscordUsername: '',
     previousDiscordDiscriminator: '',
+    totalPoints: holdings,
     wallets: [],
   };
 

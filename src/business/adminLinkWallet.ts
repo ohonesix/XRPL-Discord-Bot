@@ -34,16 +34,24 @@ const adminLinkWallet = async (message: Message, client: Client) => {
     client
   );
 
+  const newWallet: IWallet = {
+    address: walletAddress,
+    points: holdings,
+    verified: false, // todo when we have XUMM integration
+  };
+
+  const newUser: IBotUser = {
+    discordId: userAccountId,
+    discordUsername: messageParsed.username,
+    discordDiscriminator: messageParsed.tag,
+    previousDiscordUsername: '',
+    previousDiscordDiscriminator: '',
+    totalPoints: holdings,
+    wallets: [],
+  };
+
   // Save in Mongo
-  // const mongoUpdateResult = await updateUserWallet(
-  //   walletAddress,
-  //   holdings,
-  //   userAccountId,
-  //   messageParsed.username,
-  //   messageParsed.tag,
-  //   true,
-  //   true
-  // );
+  const mongoUpdateResult = await updateUserWallet(newUser, newWallet, false);
 
   // Set role
   await updateUserRoles(0, holdings, userAccountId, client, false);

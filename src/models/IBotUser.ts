@@ -4,5 +4,6 @@ interface IBotUser {
   discordDiscriminator: string;
   previousDiscordUsername: string;
   previousDiscordDiscriminator: string;
+  totalPoints: number;
   wallets: IWallet[];
 }

@@ -1,7 +1,7 @@
 import sleep from '../utils/sleep.js';
-import { getWallets } from '../data/getWallets.js';
+import { getAllUsers } from '../data/getAllUsers.js';
 import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings.js';
-import { updateUserWallet } from '../data/updateUserWallet.js';
+import { updateUser } from '../data/updateUser.js';
 import { updateUserRoles } from '../integration/discord/updateUserRoles.js';
 import { Client } from 'discord.js';
 
@@ -12,84 +12,91 @@ const scanLinkedWallets = async (
   forceUpsertRoles: boolean
 ) => {
   // Get all wallets
-  const linkedWallets = await getWallets();
+  const allUsers = await getAllUsers();
 
   let changes = 0;
   let walletIssues = 0;
-  for (let index = 0; index < linkedWallets.length; index++) {
+  for (let index = 0; index < allUsers.length; index++) {
     await sleep(500);
 
-    const storedLinkedWallet = linkedWallets[index];
+    const storedUser = allUsers[index] as IBotUser;
 
-    // Get updated holdings
-    const updatedHoldings = await getWalletHoldings(
-      storedLinkedWallet.address,
-      LOGGER
-    );
+    let updatedHoldings = 0;
+    let requeue = false;
 
-    // Rate limited, requeue for later
-    if (updatedHoldings === null || updatedHoldings === -1) {
-      await sleep(1000);
-      linkedWallets.push(storedLinkedWallet);
-      continue;
+    // Check all their wallets
+    if (storedUser?.wallets?.length > 0) {
+      for (const wallet of storedUser.wallets) {
+        // Get updated holdings
+        const currentWalletHoldings = await getWalletHoldings(
+          wallet.address,
+          LOGGER
+        );
+
+        // Rate limited, requeue user for later
+        if (currentWalletHoldings === null || currentWalletHoldings === -1) {
+          await sleep(1000);
+          allUsers.push(storedUser);
+          requeue = true;
+          break;
+        }
+
+        // Update our running total
+        updatedHoldings += currentWalletHoldings;
+        // And the wallet to be stored
+        wallet.points = currentWalletHoldings;
+      }
     }
 
-    // Check if something went wrong
-    // Error with network or no holdings
-    if (updatedHoldings === null || updatedHoldings === -1) {
-      walletIssues = walletIssues + 1;
+    // Check if we need to redo this user
+    if (requeue) {
+      walletIssues += 1;
       continue;
     }
 
     // Check if there was a change in holdings
     if (
-      storedLinkedWallet.amount === updatedHoldings &&
+      storedUser.totalPoints === updatedHoldings &&
       !forceRefreshRoles &&
       !forceUpsertRoles
     ) {
       continue;
     }
+
+    // We've got a change to make
     changes = changes + 1;
 
     // Update server role based on new holdings
     await updateUserRoles(
-      storedLinkedWallet.amount,
+      storedUser.totalPoints,
       updatedHoldings,
-      storedLinkedWallet.discordId,
+      storedUser.discordId,
       client,
       forceRefreshRoles
     );
 
     // Store update in Mongo
-    // const updateResult = await updateUserWallet(
-    //   storedLinkedWallet.address,
-    //   updatedHoldings,
-    //   storedLinkedWallet.discordId,
-    //   storedLinkedWallet.discordUsername,
-    //   storedLinkedWallet.discordDiscriminator,
-    //   storedLinkedWallet.verified,
-    //   true
-    // );
+    const updateResult = await updateUser(storedUser);
 
-    // // Track issues with saving
-    // if (updateResult !== 0) {
-    //   console.log(
-    //     `Something went wrong updating ${storedLinkedWallet.address} with ${updatedHoldings} for ${storedLinkedWallet.discordUsername}`
-    //   );
-    //   if (LOGGER !== null) {
-    //     LOGGER.trackException({
-    //       exception: new Error(
-    //         `Something went wrong updating ${storedLinkedWallet.address} with ${updatedHoldings} for ${storedLinkedWallet.discordUsername}`
-    //       ),
-    //     });
-    //   }
-    // }
+    // Track issues with saving
+    if (updateResult !== 0) {
+      console.log(
+        `Something went wrong updating ${storedUser.discordId} with ${updatedHoldings} for ${storedUser.discordUsername}`
+      );
+      if (LOGGER !== null) {
+        LOGGER.trackException({
+          exception: new Error(
+            `Something went wrong updating ${storedUser.discordId} with ${updatedHoldings} for ${storedUser.discordUsername}`
+          ),
+        });
+      }
+    }
   }
 
   if (LOGGER !== null) {
     LOGGER.trackMetric({
       name: 'scanLinkedWallets-count-total',
-      value: linkedWallets.length,
+      value: allUsers.length,
     });
     LOGGER.trackMetric({ name: 'scanLinkedWallets-changes', value: changes });
     LOGGER.trackMetric({
@@ -97,7 +104,7 @@ const scanLinkedWallets = async (
       value: walletIssues,
     });
   }
-  return `All done for ${linkedWallets.length} wallets with ${changes} changes`;
+  return `All done for ${allUsers.length} wallets with ${changes} changes`;
 };
 
 export { scanLinkedWallets };
