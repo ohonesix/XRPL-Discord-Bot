@@ -6,52 +6,65 @@ const updateUserRoles = async (
   newHoldings: number,
   userId: string,
   client: Client,
+  LOGGER: any,
   forceRefreshRoles: boolean
 ): Promise<GuildMember> => {
   try {
     // Get server for context
     const server = client.guilds.cache.get(SETTINGS.DISCORD.SERVER_ID);
 
-    // Get the role objects
-    const r1 = server.roles.cache.find(
-      (role: Role) => role.id === SETTINGS.DISCORD_ROLES.r1
-    );
-    const r2 = server.roles.cache.find(
-      (role: Role) => role.id === SETTINGS.DISCORD_ROLES.r2
-    );
+    let userAccount;
+    try {
+      userAccount = await server.members.fetch(userId);
+    } catch (error) {
+      return;
+    }
 
-
-    const userAccount = await server.members.fetch(userId);
-
-    // Check if the user has left the server
+    // Check if the user has left the server, nothing to do then
     if (!userAccount || userAccount === null) {
       return;
     }
 
-    // Remove roles on holdings decrease
-    if (newHoldings !== prevHoldings || forceRefreshRoles) {
+    const cachedRoles = [];
 
-      if (r2) {
-        await userAccount.roles.remove(r2);
-      }
-      if (r1) {
-        await userAccount.roles.remove(r1);
+    // Get the role objects
+    for (const roleRule of SETTINGS.DISCORD_ROLES.ROLES_BY_POINTS) {
+      const [key] = Object.entries(roleRule);
+      const roleId = key[0];
+      const pointsNeeded = key[1];
+
+      // Check if the role exists in Discord
+      const discordRole = server.roles.cache.find(
+        (role: Role) => role.id === roleId
+      );
+
+      // It does, store it
+      if (discordRole) {
+        cachedRoles.push({ discordRole, pointsNeeded });
       }
     }
 
-    // Role mappings
-
-    if (newHoldings >= 1 && r2) {
-      await userAccount.roles.add(r2);
-      return userAccount;
+    // Remove roles on points decrease or force refresh
+    if (newHoldings < prevHoldings || forceRefreshRoles) {
+      for (const role of cachedRoles) {
+        await userAccount.roles.remove(role.discordRole);
+      }
     }
-    if (newHoldings >= 0 && r1) {
-      await userAccount.roles.add(r1);
+
+    // Add roles based on points
+    for (const role of cachedRoles) {
+      if (newHoldings >= role.pointsNeeded) {
+        await userAccount.roles.add(role.discordRole);
+      }
     }
 
     return userAccount;
   } catch (error) {
-    console.log(error);
+    if (LOGGER !== null) {
+      LOGGER.trackException({
+        exception: new Error(error),
+      });
+    }
     return null;
   }
 };

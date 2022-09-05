@@ -33,11 +33,11 @@ const getUserWallets = async (message: Message, client: Client) => {
     userDiscordTag = usernameParsed?.tag;
   }
 
-  const wallets = await getWalletsForUser(userDiscordName, userDiscordTag);
+  const users = await getWalletsForUser(userDiscordName, userDiscordTag);
 
-  if (!wallets || wallets?.length === 0) {
+  if (!users || users?.length === 0) {
     return message.reply(
-      `No stored wallet for ${userDiscordName}#${userDiscordTag}, ask them to link their wallet first`
+      `No stored users for ${userDiscordName}#${userDiscordTag}, ask them to link their wallet first`
     );
   }
 
@@ -48,7 +48,7 @@ const getUserWallets = async (message: Message, client: Client) => {
     client
   );
 
-  if (wallets.includes((entry: any) => entry.discordId !== usernameDiscordId)) {
+  if (users.filter((user) => user.discordId !== usernameDiscordId).length > 0) {
     return message.reply(
       `⚠ Something weird going on here! The stored wallet details we have don't match the current Discord user ID for ${userDiscordName}#${userDiscordTag}. Proceed with caution`
     );
@@ -56,13 +56,15 @@ const getUserWallets = async (message: Message, client: Client) => {
 
   let result = `Wallet(s) for ${userDiscordName}#${userDiscordTag}:`;
 
-  wallets.forEach((wallet) => {
-    result += `\n   ${truncate(wallet.amount ?? 0, 2)}\t -> \t${
-      wallet.address
-    }`;
+  users.forEach((user) => {
+    user.wallets.forEach((wallet) => {
+      result += `\n   ${truncate(wallet.points ?? 0, 2)}\t -> \t${
+        wallet.address
+      }`;
+    });
 
-    if (wallet?.previousDiscordUsername) {
-      result += `\t\t Previous Username: ${wallet.previousDiscordUsername}#${wallet.previousDiscordDiscriminator}`;
+    if (user?.previousDiscordUsername) {
+      result += `\t\t Previous Username: ${user.previousDiscordUsername}#${user.previousDiscordDiscriminator}`;
     }
   });
 

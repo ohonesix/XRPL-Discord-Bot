@@ -90,7 +90,7 @@ const linkWallet = async (
   }
 
   // Set role
-  await updateUserRoles(0, holdings, user.id, client, false);
+  await updateUserRoles(0, holdings, user.id, client, LOGGER, false);
 
   if (LOGGER !== null) {
     LOGGER.trackEvent({

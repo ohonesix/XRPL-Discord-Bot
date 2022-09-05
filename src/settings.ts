@@ -26,8 +26,7 @@ const SETTINGS = {
     // SERVER_URL: The XRPL server addess to use, MUST BE A WEBSOCKET CONNECTION.
     // It is advisable to run your own server and use that instead as the free cluster has
     // quite low rate limits.
-    SERVER_URL:
-      process.env.XRPL_SERVER_URL || 'wss://xrplcluster.com/',
+    SERVER_URL: process.env.XRPL_SERVER_URL || 'wss://xrplcluster.com/',
     // TOKEN_HASH
     // The token to track. Ideally in the future more than one token will be possible.
     TOKEN_HASH: process.env.XRPL_TOKEN_HASH || 'replace-me',
@@ -41,8 +40,18 @@ const SETTINGS = {
     FORMATTED_TOKEN: process.env.SOLOGENIC_FORMATTED_TOKEN || 'replace-me',
   },
   DISCORD_ROLES: {
-    r1: '123',
-    r2: '456',
+    // ROLES_BY_POINTS
+    // Add roles to users based on amount/points holdings
+    // Format is an array of objects in the format of { Discord Role ID : points required for that role }
+    // For example: [ { '123': 1 }, { '111' : 2 }, { '321' : 99 } ]
+    ROLES_BY_POINTS: [
+      { '911568176842678302': 1 },
+      { '912293092751724564': 8 },
+      { '911568252692471838': 25 },
+    ],
+    // ROLES_BY_TOKEN
+    // Reserved for future use.
+    ROLES_BY_TOKEN: 'RESERVED FOR FUTURE USE ;)',
   },
   // Using Application Insights is completely optional.
   APPLICATION_INSIGHTS: {

@@ -10,10 +10,10 @@ const getWalletsForUser = async (username: string, tag: string) => {
 
   const db = client.db(SETTINGS.MONGODB.DATABASE_NAME);
 
-  const wallets = await db
+  const wallets = (await db
     .collection(SETTINGS.MONGODB.USERS_TABLE)
     .find({ discordUsername: username, discordDiscriminator: tag })
-    .toArray();
+    .toArray()) as IBotUser[];
 
   client.close();
   return wallets;

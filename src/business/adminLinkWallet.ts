@@ -54,7 +54,7 @@ const adminLinkWallet = async (message: Message, client: Client) => {
   const mongoUpdateResult = await updateUserWallet(newUser, newWallet, false);
 
   // Set role
-  await updateUserRoles(0, holdings, userAccountId, client, false);
+  await updateUserRoles(0, holdings, userAccountId, client, null, false);
 
   // Send confirmation to the user
   return message.reply(`I see their ${holdings} points admin! Linked 🚀`);

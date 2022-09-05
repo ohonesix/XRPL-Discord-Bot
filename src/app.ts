@@ -155,7 +155,9 @@ discordClient.login(SETTINGS.DISCORD.BOT_TOKEN);
 const webServer = express();
 
 webServer.get('/', async (req, res) => {
-  res.send('https://ohonesix.com/xrpl-discord-bot');
+  res.send(
+    'The XRPL Discord Bot is running! <a href="https://ohonesix.com/xrpl-discord-bot">Check for updates</a>'
+  );
 });
 
 webServer.get('/status', async (req, res) => {

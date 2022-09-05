@@ -4,6 +4,7 @@ import { updateUserAccount } from '../data/updateUserAccount.js';
 import { getUserAccountById } from '../integration/discord/getUserAccountById.js';
 import { Client } from 'discord.js';
 
+// Tracks users changing their Discord username
 const scanLinkedAccounts = async (client: Client, LOGGER: any) => {
   // Get all wallets
   const allUsers = await getAllUsers();

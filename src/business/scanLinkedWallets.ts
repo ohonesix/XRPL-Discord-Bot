@@ -5,6 +5,7 @@ import { updateUser } from '../data/updateUser.js';
 import { updateUserRoles } from '../integration/discord/updateUserRoles.js';
 import { Client } from 'discord.js';
 
+// Scans user wallets and updates their roles
 const scanLinkedWallets = async (
   client: Client,
   LOGGER: any,
@@ -25,7 +26,7 @@ const scanLinkedWallets = async (
     let requeue = false;
 
     // Check all their wallets
-    if (storedUser?.wallets?.length > 0) {
+    if (storedUser.wallets?.length > 0) {
       for (const wallet of storedUser.wallets) {
         // Get updated holdings
         const currentWalletHoldings = await getWalletHoldings(
@@ -72,10 +73,12 @@ const scanLinkedWallets = async (
       updatedHoldings,
       storedUser.discordId,
       client,
+      LOGGER,
       forceRefreshRoles
     );
 
     // Store update in Mongo
+    storedUser.totalPoints = updatedHoldings;
     const updateResult = await updateUser(storedUser);
 
     // Track issues with saving
