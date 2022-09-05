@@ -24,7 +24,7 @@ const SETTINGS = {
     // It is advisable to run your own server and use that instead as the free cluster has
     // quite low rate limits.
     SERVER_URL:
-      process.env.XRPL_SERVER_URL || 'http://localhost:wss://xrplcluster.com/',
+      process.env.XRPL_SERVER_URL || 'wss://xrplcluster.com/',
     // TOKEN_HASH
     // The token to track. Ideally in the future more than one token will be possible.
     TOKEN_HASH: process.env.XRPL_TOKEN_HASH || 'replace-me',
