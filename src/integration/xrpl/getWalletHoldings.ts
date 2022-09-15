@@ -54,7 +54,8 @@ const getWalletHoldings = async (address: string, LOGGER: any) => {
 
     return holdings;
   } catch (error) {
-    // Dont care about logging these
+    // Dont care about logging these as its not really an error,
+    // just that the user doesn't have the trustline.
     if (error?.data?.error === 'actNotFound') {
       // Return -1 so no trustline error is caught
       return -1;

@@ -166,8 +166,9 @@ webServer.get('/status', async (req, res) => {
 
 webServer.get('/updateWallets', async (req, res) => {
   req.setTimeout(9999999);
-  const forceRefreshRoles = req.query.forceRefreshRoles != null ? true : false;
-  const forceUpsertRoles = req.query.forceUpsertRoles != null ? true : false;
+  const forceRefreshRoles =
+    req.query.forceRefreshRoles === 'true' ? true : false;
+  const forceUpsertRoles = req.query.forceUpsertRoles === 'true' ? true : false;
 
   res.send(
     await scanLinkedWallets(

@@ -35,17 +35,24 @@ const scanLinkedWallets = async (
         );
 
         // Rate limited, requeue user for later
-        if (currentWalletHoldings === null || currentWalletHoldings === -1) {
+        if (currentWalletHoldings === null) {
           await sleep(1000);
           allUsers.push(storedUser);
           requeue = true;
           break;
         }
 
+        // Update our records for this wallet to be stored
+        wallet.points = currentWalletHoldings;
+
+        // User doesn't have the trustline anymore, correct our record
+        if (currentWalletHoldings === -1) {
+          wallet.points = 0;
+          continue;
+        }
+
         // Update our running total
         updatedHoldings += currentWalletHoldings;
-        // And the wallet to be stored
-        wallet.points = currentWalletHoldings;
       }
     }
 
@@ -65,7 +72,7 @@ const scanLinkedWallets = async (
     }
 
     // We've got a change to make
-    changes = changes + 1;
+    changes += 1;
 
     // Update server role based on new holdings
     await updateUserRoles(
@@ -107,7 +114,7 @@ const scanLinkedWallets = async (
       value: walletIssues,
     });
   }
-  return `All done for ${allUsers.length} wallets with ${changes} changes`;
+  return `All done for ${allUsers.length} users with ${changes} changes`;
 };
 
 export { scanLinkedWallets };
