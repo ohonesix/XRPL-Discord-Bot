@@ -34,3 +34,7 @@ Are all saved in /src/settings.ts (although ideally you shouldn't be checking th
 Use the URL below to add the bot to your Discord server. Notice the client_id needs to be updated
 
 https://discord.com/api/oauth2/authorize?client_id=replace-me&permissions=545394228336&scope=applications.commands%20bot
+
+# Naming
+
+Trying to stick to https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines as long as it makes sense for naming. Although rule 2 is to be ignored IInterface names are preferred.

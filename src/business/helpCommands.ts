@@ -1,5 +1,7 @@
 import isAdmin from '../utils/isAdmin.js';
 import { Message } from 'discord.js';
+import EventWrapper from '../events/EventWrapper.js';
+import { EventTypes } from '../events/EventTypes.js';
 
 const helpCommands = async (message: Message) => {
   let reply = `You can
@@ -21,4 +23,17 @@ const helpCommands = async (message: Message) => {
   return message.reply(reply);
 };
 
-export { helpCommands };
+const eventCallback = (eventWrapper: EventWrapper) => {
+  const inputLower = eventWrapper.payload.content.toLowerCase();
+
+  if (inputLower.includes('commands') || inputLower.includes('help')) {
+    eventWrapper.handled = true;
+    return helpCommands(eventWrapper.payload);
+  }
+};
+
+export default class HelpCommands {
+  public static setup(eventEmitter: any): void {
+    eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
+  }
+}

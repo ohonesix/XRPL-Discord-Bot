@@ -13,13 +13,20 @@ import { linkWallet } from './business/linkWallet.js';
 import { scanLinkedWallets } from './business/scanLinkedWallets.js';
 import { scanLinkedAccounts } from './business/scanLinkedAccounts.js';
 import { adminLinkWallet } from './business/adminLinkWallet.js';
-import { checkWallet } from './business/checkWallet.js';
 import { getPrice } from './business/getPrice.js';
 import { getUsersForRole } from './business/getUsersForRole.js';
 import { getUserWallets } from './business/getUserWallets.js';
-import { helpCommands } from './business/helpCommands.js';
+
 import { verifyWallet } from './business/verifyWallet.js';
 import { adminDeleteWallet } from './business/adminDeleteWallet.js';
+
+// Event based events
+// First we need to setup the event factory
+import EventFactory from './events/EventFactory.js';
+import { EventTypes } from './events/EventTypes.js';
+// Then load and setup all listeners
+// import helpCommands from './business/helpCommands.js';
+// helpCommands.setupListeners();
 
 // Discord Client
 const discordClient = new Client({
@@ -97,6 +104,11 @@ discordClient.on('messageCreate', async (message: Message) => {
 
   const inputLower = message.content.toLowerCase();
 
+  EventFactory.getInstance().eventEmitter.emitWrapped(
+    EventTypes.MESSAGE,
+    message
+  );
+
   if (inputLower.includes('adminlinkwallet')) {
     await adminLinkWallet(message, discordClient);
     return;
@@ -117,11 +129,6 @@ discordClient.on('messageCreate', async (message: Message) => {
     return;
   }
 
-  if (inputLower.includes('checkwallet')) {
-    await checkWallet(message, discordClient);
-    return;
-  }
-
   if (inputLower.includes('getusers')) {
     await getUsersForRole(message, discordClient);
     return;
@@ -136,13 +143,6 @@ discordClient.on('messageCreate', async (message: Message) => {
     await verifyWallet(message, discordClient);
     return;
   }
-
-  if (inputLower.includes('commands') || inputLower.includes('help')) {
-    await helpCommands(message);
-    return;
-  }
-
-  message.reply(`I don't know what to do with that, type !commands for help`);
 });
 
 discordClient.on('ready', async () => {
