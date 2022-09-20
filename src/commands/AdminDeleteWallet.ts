@@ -2,6 +2,8 @@ import getWalletAddress from '../utils/getWalletAddress.js';
 import isAdmin from '../utils/isAdmin.js';
 import { deleteWallet } from '../data/deleteWallet.js';
 import { Message } from 'discord.js';
+import EventPayload from '../events/EventPayload.js';
+import { EventTypes } from '../events/EventTypes.js';
 
 const adminDeleteWallet = async (message: Message) => {
   if (!isAdmin(message.author.id)) {
@@ -24,4 +26,18 @@ const adminDeleteWallet = async (message: Message) => {
   return message.reply(`Deleted ${walletAddress} from my records.`);
 };
 
-export { adminDeleteWallet };
+const eventCallback = async (payload: EventPayload) => {
+  if (
+    payload.messageLowered.includes('admin delete wallet') ||
+    payload.messageLowered.includes('admindeletewallet')
+  ) {
+    payload.handled = true;
+    return await adminDeleteWallet(payload.message);
+  }
+};
+
+export default class AdminDeleteWallet {
+  public static setup(eventEmitter: any): void {
+    eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
+  }
+}

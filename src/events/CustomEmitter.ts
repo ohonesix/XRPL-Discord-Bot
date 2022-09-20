@@ -1,14 +1,28 @@
 // tslint:disable-next-line
 const EventEmitter = require('eventemitter3');
-import EventWrapper from './EventWrapper';
+import { EventTypes } from './EventTypes';
+import EventPayload from './EventPayload';
+import { Message, Client, CommandInteraction } from 'discord.js';
 
 // A simple wrapper that extends the default EventEmitter so
-// that we can ensure all emitted events are wrapped in our
-// custom 'EventWrapper'.
+// that we can ensure all emitted events using our EventPayload.
 export default class CustomEmitter extends EventEmitter {
-  emitWrapped(event: any, payload: any) {
-    const wrapper = new EventWrapper(payload);
-    this.emit(event, wrapper);
+  emitPayload(
+    eventType: EventTypes,
+    message: Message,
+    messageLowered: string,
+    client: Client,
+    interaction: CommandInteraction,
+    logger: any
+  ) {
+    const wrapper = new EventPayload(
+      message,
+      messageLowered,
+      client,
+      interaction,
+      logger
+    );
+    this.emit(eventType, wrapper);
     return wrapper;
   }
 }

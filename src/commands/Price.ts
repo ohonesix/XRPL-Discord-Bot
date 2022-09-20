@@ -1,6 +1,8 @@
 import { getTradingDetails } from '../integration/sologenic/getTradingDetails.js';
 import truncate from '../utils/truncate.js';
 import SETTINGS from '../settings.js';
+import EventPayload from '../events/EventPayload.js';
+import { EventTypes } from '../events/EventTypes.js';
 
 const getPrice = async (): Promise<string> => {
   const details = await getTradingDetails(SETTINGS.SOLOGENIC.FORMATTED_TOKEN);
@@ -15,4 +17,19 @@ const getPrice = async (): Promise<string> => {
   )} XRP (volume past 24 hours: ${truncate(details.volume, 2)})`;
 };
 
-export { getPrice };
+const eventCallback = async (payload: EventPayload) => {
+  if (payload.interaction.commandName === 'price') {
+    payload.handled = true;
+
+    await payload.interaction.reply({
+      content: await getPrice(),
+    });
+    return;
+  }
+};
+
+export default class Price {
+  public static setup(eventEmitter: any): void {
+    eventEmitter.addListener(EventTypes.INTERACTION, eventCallback);
+  }
+}

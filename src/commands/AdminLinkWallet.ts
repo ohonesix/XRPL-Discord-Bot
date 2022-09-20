@@ -6,6 +6,8 @@ import { getUserAccountIdByUsername } from '../integration/discord/getUserAccoun
 import { updateUserWallet } from '../data/updateUserWallet.js';
 import { updateUserRoles } from '../integration/discord/updateUserRoles.js';
 import { Client, Message } from 'discord.js';
+import EventPayload from '../events/EventPayload.js';
+import { EventTypes } from '../events/EventTypes.js';
 
 const adminLinkWallet = async (message: Message, client: Client) => {
   if (!isAdmin(message.author.id)) {
@@ -60,4 +62,18 @@ const adminLinkWallet = async (message: Message, client: Client) => {
   return message.reply(`I see their ${holdings} points admin! Linked 🚀`);
 };
 
-export { adminLinkWallet };
+const eventCallback = async (payload: EventPayload) => {
+  if (
+    payload.messageLowered.includes('admin link wallet') ||
+    payload.messageLowered.includes('adminlinkwallet')
+  ) {
+    payload.handled = true;
+    return await adminLinkWallet(payload.message, payload.client);
+  }
+};
+
+export default class AdminLinkWallet {
+  public static setup(eventEmitter: any): void {
+    eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
+  }
+}

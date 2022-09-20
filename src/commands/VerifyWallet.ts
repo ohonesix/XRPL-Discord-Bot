@@ -4,6 +4,8 @@ import getUserNameFromVerifyWalletCommand from '../utils/getUserNameFromVerifyWa
 import { getUserAccountIdByUsername } from '../integration/discord/getUserAccountIdByUsername.js';
 import { getWalletForAddress } from '../data/getWalletForAddress.js';
 import { Client, Message } from 'discord.js';
+import EventPayload from '../events/EventPayload.js';
+import { EventTypes } from '../events/EventTypes.js';
 
 const verifyWallet = async (message: Message, client: Client) => {
   if (!isAdmin(message.author.id)) {
@@ -57,4 +59,18 @@ const verifyWallet = async (message: Message, client: Client) => {
   );
 };
 
-export { verifyWallet };
+const eventCallback = async (payload: EventPayload) => {
+  if (
+    payload.messageLowered.includes('verify wallet') ||
+    payload.messageLowered.includes('verifywallet')
+  ) {
+    payload.handled = true;
+    return await verifyWallet(payload.message, payload.client);
+  }
+};
+
+export default class VerifyWallet {
+  public static setup(eventEmitter: any): void {
+    eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
+  }
+}

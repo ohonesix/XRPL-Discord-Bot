@@ -2,9 +2,11 @@ import getWalletAddress from '../utils/getWalletAddress.js';
 import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings.js';
 import { updateUserWallet } from '../data/updateUserWallet.js';
 import { updateUserRoles } from '../integration/discord/updateUserRoles.js';
-import { Client, User } from 'discord.js';
+import { Client, User, Interaction } from 'discord.js';
 import truncate from '../utils/truncate.js';
 import { WalletUpdateResponse } from '../models/enum/walletUpdateResponse.js';
+import EventPayload from '../events/EventPayload.js';
+import { EventTypes } from '../events/EventTypes.js';
 
 const linkWallet = async (
   message: string,
@@ -114,4 +116,48 @@ const linkWallet = async (
   )} points! Updated server roles set 🚀`;
 };
 
-export { linkWallet };
+const eventCallbackOnMessage = async (payload: EventPayload) => {
+  if (
+    payload.messageLowered.includes('link wallet') ||
+    payload.messageLowered.includes('linkwallet')
+  ) {
+    payload.handled = true;
+
+    return payload.message.reply(
+      await linkWallet(
+        payload.message.content,
+        payload.message.author,
+        payload.client,
+        payload.logger
+      )
+    );
+  }
+};
+
+const eventCallbackOnInteraction = async (payload: EventPayload) => {
+  if (payload.interaction.commandName === 'linkwallet') {
+    payload.handled = true;
+
+    await payload.interaction.reply({
+      content: await linkWallet(
+        payload.interaction.options.getString('wallet-address'),
+        payload.interaction.user,
+        payload.client,
+        payload.logger
+      ),
+      ephemeral: true,
+    });
+    return;
+  }
+};
+
+export default class LinkWallet {
+  public static setup(eventEmitter: any): void {
+    eventEmitter.addListener(EventTypes.MESSAGE, eventCallbackOnMessage);
+
+    eventEmitter.addListener(
+      EventTypes.INTERACTION,
+      eventCallbackOnInteraction
+    );
+  }
+}

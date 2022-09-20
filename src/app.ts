@@ -9,24 +9,11 @@ const LOGGER = appInsights?.defaultClient ?? null;
 
 import express from 'express';
 import { Client, Intents, Message, Interaction } from 'discord.js';
-import { linkWallet } from './business/linkWallet.js';
-import { scanLinkedWallets } from './business/scanLinkedWallets.js';
-import { scanLinkedAccounts } from './business/scanLinkedAccounts.js';
-import { adminLinkWallet } from './business/adminLinkWallet.js';
-import { getPrice } from './business/getPrice.js';
-import { getUsersForRole } from './business/getUsersForRole.js';
-import { getUserWallets } from './business/getUserWallets.js';
-
-import { verifyWallet } from './business/verifyWallet.js';
-import { adminDeleteWallet } from './business/adminDeleteWallet.js';
-
-// Event based events
-// First we need to setup the event factory
 import EventFactory from './events/EventFactory.js';
 import { EventTypes } from './events/EventTypes.js';
-// Then load and setup all listeners
-// import helpCommands from './business/helpCommands.js';
-// helpCommands.setupListeners();
+
+import { scanLinkedWallets } from './business/scanLinkedWallets.js';
+import { scanLinkedAccounts } from './business/scanLinkedAccounts.js';
 
 // Discord Client
 const discordClient = new Client({
@@ -72,27 +59,19 @@ rest.put(
   { body: commands }
 );
 
-// Discord Slash Events
+// Discord /Slash Events
 discordClient.on('interactionCreate', async (interaction: Interaction) => {
   if (!interaction.isCommand()) return;
 
-  if (interaction.commandName === 'linkwallet') {
-    await interaction.reply({
-      content: await linkWallet(
-        interaction.options.getString('wallet-address'),
-        interaction.user,
-        discordClient,
-        LOGGER
-      ),
-      ephemeral: true,
-    });
-    return;
-  }
-
-  if (interaction.commandName === 'price') {
-    await interaction.reply(await getPrice());
-    return;
-  }
+  // Emit the interaction so our registered commands can respond
+  EventFactory.getInstance().eventEmitter.emitPayload(
+    EventTypes.INTERACTION,
+    null, // no Message for Interactions
+    null,
+    discordClient,
+    interaction,
+    LOGGER
+  );
 });
 
 // Discord Message Events
@@ -102,47 +81,15 @@ discordClient.on('messageCreate', async (message: Message) => {
     return;
   }
 
-  const inputLower = message.content.toLowerCase();
-
-  EventFactory.getInstance().eventEmitter.emitWrapped(
+  // Emit the message so our registered commands can respond
+  EventFactory.getInstance().eventEmitter.emitPayload(
     EventTypes.MESSAGE,
-    message
+    message,
+    message.content.toLowerCase(),
+    discordClient,
+    null, // no Interaction in DM's
+    LOGGER
   );
-
-  if (inputLower.includes('adminlinkwallet')) {
-    await adminLinkWallet(message, discordClient);
-    return;
-  }
-
-  if (
-    inputLower.includes('admindeletewallet') ||
-    inputLower.includes('admin delete wallet')
-  ) {
-    await adminDeleteWallet(message);
-    return;
-  }
-
-  if (inputLower.includes('linkwallet') || inputLower.includes('link wallet')) {
-    message.reply(
-      await linkWallet(message.content, message.author, discordClient, LOGGER)
-    );
-    return;
-  }
-
-  if (inputLower.includes('getusers')) {
-    await getUsersForRole(message, discordClient);
-    return;
-  }
-
-  if (inputLower.includes('getwallet')) {
-    await getUserWallets(message, discordClient);
-    return;
-  }
-
-  if (inputLower.includes('verifywallet')) {
-    await verifyWallet(message, discordClient);
-    return;
-  }
 });
 
 discordClient.on('ready', async () => {

@@ -6,8 +6,10 @@ import getUserNameFromGetWalletCommand from '../utils/getUserNameFromGetWalletCo
 import { getWalletsForUser } from '../data/getWalletsForUser.js';
 import { getUserAccountIdByUsername } from '../integration/discord/getUserAccountIdByUsername.js';
 import { getWalletForAddress } from '../data/getWalletForAddress.js';
+import EventPayload from '../events/EventPayload.js';
+import { EventTypes } from '../events/EventTypes.js';
 
-const getUserWallets = async (message: Message, client: Client) => {
+const getUserWallet = async (message: Message, client: Client) => {
   if (!isAdmin(message.author.id)) {
     return message.reply(`Sorry you are not autorised to do that.`);
   }
@@ -71,4 +73,18 @@ const getUserWallets = async (message: Message, client: Client) => {
   return message.reply(result);
 };
 
-export { getUserWallets };
+const eventCallback = async (payload: EventPayload) => {
+  if (
+    payload.messageLowered.includes('get wallet') ||
+    payload.messageLowered.includes('getwallet')
+  ) {
+    payload.handled = true;
+    return await getUserWallet(payload.message, payload.client);
+  }
+};
+
+export default class GetUserWallet {
+  public static setup(eventEmitter: any): void {
+    eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
+  }
+}

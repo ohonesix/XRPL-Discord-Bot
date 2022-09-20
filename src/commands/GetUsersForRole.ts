@@ -2,6 +2,8 @@ import { Client, Message, Role } from 'discord.js';
 import isAdmin from '../utils/isAdmin.js';
 import getRole from '../utils/getRole.js';
 import SETTINGS from '../settings.js';
+import EventPayload from '../events/EventPayload.js';
+import { EventTypes } from '../events/EventTypes.js';
 
 const getUsersForRole = async (message: Message, client: Client) => {
   if (!isAdmin(message.author.id)) {
@@ -38,4 +40,18 @@ const getUsersForRole = async (message: Message, client: Client) => {
   return message.reply(result);
 };
 
-export { getUsersForRole };
+const eventCallback = async (payload: EventPayload) => {
+  if (
+    payload.messageLowered.includes('get users') ||
+    payload.messageLowered.includes('getusers')
+  ) {
+    payload.handled = true;
+    return await getUsersForRole(payload.message, payload.client);
+  }
+};
+
+export default class GetUsersForRole {
+  public static setup(eventEmitter: any): void {
+    eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
+  }
+}

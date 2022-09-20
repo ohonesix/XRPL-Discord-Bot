@@ -1,9 +1,9 @@
 import isAdmin from '../utils/isAdmin.js';
 import { Message } from 'discord.js';
-import EventWrapper from '../events/EventWrapper.js';
+import EventPayload from '../events/EventPayload.js';
 import { EventTypes } from '../events/EventTypes.js';
 
-const helpCommands = async (message: Message) => {
+const help = async (message: Message) => {
   let reply = `You can
   - Link a wallet to your account using: 'linkwallet WALLETADDRESSHERE'
   - Check wallet points using: 'checkwallet WALLETADDRESSHERE'
@@ -23,16 +23,17 @@ const helpCommands = async (message: Message) => {
   return message.reply(reply);
 };
 
-const eventCallback = (eventWrapper: EventWrapper) => {
-  const inputLower = eventWrapper.payload.content.toLowerCase();
-
-  if (inputLower.includes('commands') || inputLower.includes('help')) {
-    eventWrapper.handled = true;
-    return helpCommands(eventWrapper.payload);
+const eventCallback = async (payload: EventPayload) => {
+  if (
+    payload.messageLowered.includes('commands') ||
+    payload.messageLowered.includes('help')
+  ) {
+    payload.handled = true;
+    return await help(payload.message);
   }
 };
 
-export default class HelpCommands {
+export default class Help {
   public static setup(eventEmitter: any): void {
     eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
   }

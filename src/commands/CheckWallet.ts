@@ -1,7 +1,7 @@
 import getWalletAddress from '../utils/getWalletAddress.js';
 import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings.js';
 import { Message } from 'discord.js';
-import EventWrapper from '../events/EventWrapper.js';
+import EventPayload from '../events/EventPayload.js';
 import { EventTypes } from '../events/EventTypes.js';
 
 const checkWallet = async (message: Message) => {
@@ -32,15 +32,13 @@ const checkWallet = async (message: Message) => {
   );
 };
 
-const eventCallback = (eventWrapper: EventWrapper) => {
-  const inputLower = eventWrapper.payload.content.toLowerCase();
-
+const eventCallback = async (payload: EventPayload) => {
   if (
-    inputLower.includes('check wallet') ||
-    inputLower.includes('checkwallet')
+    payload.messageLowered.includes('check wallet') ||
+    payload.messageLowered.includes('checkwallet')
   ) {
-    eventWrapper.handled = true;
-    return checkWallet(eventWrapper.payload);
+    payload.handled = true;
+    return await checkWallet(payload.message);
   }
 };
 
