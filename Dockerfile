@@ -1,4 +1,4 @@
-FROM node:16.6-stretch-slim
+FROM node:16.17.0-slim
 
 # Env
 ARG TIME_ZONE=Europe/London

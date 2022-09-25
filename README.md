@@ -10,7 +10,7 @@ See above, it is not that time yet.
 
 ## Node
 
-Requires node 16.6.0+ and can be run with the standard `npm run start` in the root folder. This will start and run the Discord bot.
+Requires node 16.17.0+ and can be run with the standard `npm run start` in the root folder. This will start and run the Discord bot.
 
 The webserver listens on port 5880 for
 
