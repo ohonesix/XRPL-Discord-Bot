@@ -2,7 +2,7 @@
 
 WARNING:
 
-This is under active development and is NOT READY to be used in production. There will be fundamental data structure changes which will cause data loss. Rather wait a bit for the stable beta release.
+This is the alpha release, using it in production is not yet advised.
 
 ## Setup instructions
 

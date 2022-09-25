@@ -25,12 +25,12 @@ const discordClient = new Client({
   partials: ['CHANNEL', 'GUILD_MEMBER', 'MESSAGE', 'USER', 'REACTION'],
 });
 
-// Discord slash commands
 // tslint:disable-next-line
 const { REST } = require('@discordjs/rest');
 // tslint:disable-next-line
 const { Routes } = require('discord-api-types/v9');
 
+// Discord slash commands
 const commands = [
   {
     name: 'linkwallet',
