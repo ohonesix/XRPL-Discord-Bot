@@ -1,6 +1,6 @@
 import SETTINGS from '../settings.js';
 import mongodb from 'mongodb';
-import { WalletUpdateResponse } from '../models/enum/walletUpdateResponse.js';
+import { WalletUpdateResponse } from '../models/enum/WalletUpdateResponse.js';
 const { MongoClient } = mongodb;
 
 const updateUser = async (user: IBotUser): Promise<WalletUpdateResponse> => {

@@ -4,7 +4,7 @@ import { updateUserWallet } from '../data/updateUserWallet.js';
 import { updateUserRoles } from '../integration/discord/updateUserRoles.js';
 import { Client, User } from 'discord.js';
 import truncate from '../utils/truncate.js';
-import { WalletUpdateResponse } from '../models/enum/walletUpdateResponse.js';
+import { WalletUpdateResponse } from '../models/enum/WalletUpdateResponse.js';
 import { EventTypes, EventPayload } from '../events/BotEvents.js';
 
 const linkWallet = async (
