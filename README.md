@@ -1,5 +1,7 @@
 # XRPL Discord Bot
 
+[![Build CI](https://github.com/jacobpretorius/XRPL-Discord-Bot/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/jacobpretorius/XRPL-Discord-Bot/actions/workflows/node.js.yml)
+
 WARNING:
 
 This is the alpha release, using it in production is not yet advised.
