@@ -1,39 +1,19 @@
 import { Client, Message } from 'discord.js';
 import isAdmin from '../utils/isAdmin.js';
 import truncate from '../utils/truncate.js';
-import getWalletAddress from '../utils/getWalletAddress.js';
 import getUserNameFromGetWalletCommand from '../utils/getUserNameFromGetWalletCommand.js';
 import { getWalletsForUser } from '../data/getWalletsForUser.js';
 import { getUserAccountIdByUsername } from '../integration/discord/getUserAccountIdByUsername.js';
-import { getWalletForAddress } from '../data/getWalletForAddress.js';
-import EventPayload from '../events/EventPayload.js';
-import { EventTypes } from '../events/EventTypes.js';
+import { EventTypes, EventPayload } from '../events/BotEvents.js';
 
-const getUserWallet = async (message: Message, client: Client) => {
+const getWallet = async (message: Message, client: Client) => {
   if (!isAdmin(message.author.id)) {
     return message.reply(`Sorry you are not autorised to do that.`);
   }
 
-  let userDiscordName = '';
-  let userDiscordTag = '';
-
-  // Check if we are using the "get by address method"
-  const walletAddress = getWalletAddress(message.content);
-  if (walletAddress && walletAddress?.length > 5) {
-    const linkedWallet = await getWalletForAddress(walletAddress);
-
-    if (!linkedWallet?.discordUsername && !linkedWallet?.discordDiscriminator) {
-      return message.reply(`Could not get a user linked to ${walletAddress}`);
-    }
-
-    userDiscordName = linkedWallet.discordUsername;
-    userDiscordTag = linkedWallet.discordDiscriminator;
-  } else {
-    // If not it's "get by username"
-    const usernameParsed = getUserNameFromGetWalletCommand(message.content);
-    userDiscordName = usernameParsed?.username;
-    userDiscordTag = usernameParsed?.tag;
-  }
+  const usernameParsed = getUserNameFromGetWalletCommand(message.content);
+  const userDiscordName = usernameParsed?.username;
+  const userDiscordTag = usernameParsed?.tag;
 
   const users = await getWalletsForUser(userDiscordName, userDiscordTag);
 
@@ -79,11 +59,11 @@ const eventCallback = async (payload: EventPayload) => {
     payload.messageLowered.includes('getwallet')
   ) {
     payload.handled = true;
-    return await getUserWallet(payload.message, payload.client);
+    return await getWallet(payload.message, payload.client);
   }
 };
 
-export default class GetUserWallet {
+export default class GetWallet {
   public static setup(eventEmitter: any): void {
     eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
   }

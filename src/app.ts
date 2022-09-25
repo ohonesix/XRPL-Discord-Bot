@@ -9,8 +9,8 @@ const LOGGER = appInsights?.defaultClient ?? null;
 
 import express from 'express';
 import { Client, Intents, Message, Interaction } from 'discord.js';
-import EventFactory from './events/EventFactory.js';
-import { EventTypes } from './events/EventTypes.js';
+import EventFactory from './events/EventFactory';
+import { EventTypes } from './events/BotEvents';
 
 import { scanLinkedWallets } from './business/scanLinkedWallets.js';
 import { scanLinkedAccounts } from './business/scanLinkedAccounts.js';

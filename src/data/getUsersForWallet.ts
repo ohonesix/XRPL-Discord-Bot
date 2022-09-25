@@ -2,7 +2,7 @@ import SETTINGS from '../settings.js';
 import mongodb from 'mongodb';
 const { MongoClient } = mongodb;
 
-const getWalletForAddress = async (address: string) => {
+const getUsersForWallet = async (address: string): Promise<IBotUser[]> => {
   const client = await MongoClient.connect(SETTINGS.MONGODB.SERVER_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -10,12 +10,13 @@ const getWalletForAddress = async (address: string) => {
 
   const db = client.db(SETTINGS.MONGODB.DATABASE_NAME);
 
-  const wallet = await db
+  const storedWallets = (await db
     .collection(SETTINGS.MONGODB.USERS_TABLE)
-    .findOne({ 'wallet.address': address });
+    .find({ 'wallets.address': address })
+    .toArray()) as IBotUser[];
 
   client.close();
-  return wallet;
+  return storedWallets;
 };
 
-export { getWalletForAddress };
+export { getUsersForWallet };

@@ -10,10 +10,9 @@ See above, it is not that time yet.
 
 ## Node
 
-Requires node 16.6.0+ and ca be run with the standard `npm run start` in the root folder. This will start and run the Discord bot only.
+Requires node 16.6.0+ and can be run with the standard `npm run start` in the root folder. This will start and run the Discord bot.
 
-The bot project:
-listens on port 5880 for
+The webserver listens on port 5880 for
 
 /status
 
@@ -27,7 +26,7 @@ More on that once it is ready for use.
 
 ## Secrets
 
-Are all saved in /src/settings.ts (although ideally you shouldn't be checking these in to your repo, better to set them as environment variables)
+Are all saved in /src/settings.ts (although ideally you shouldn't be checking these in to your repo, better to set them as environment variables).
 
 ## Adding to your Discord
 
@@ -37,4 +36,4 @@ https://discord.com/api/oauth2/authorize?client_id=replace-me&permissions=545394
 
 # Naming
 
-Trying to stick to https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines as long as it makes sense for naming. Although rule 2 is to be ignored IInterface names are preferred.
+Trying to stick to https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines as long as it makes sense for naming. Although rule 2 is to be ignored as IInterface names are preferred.

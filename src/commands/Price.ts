@@ -1,8 +1,7 @@
 import { getTradingDetails } from '../integration/sologenic/getTradingDetails.js';
 import truncate from '../utils/truncate.js';
 import SETTINGS from '../settings.js';
-import EventPayload from '../events/EventPayload.js';
-import { EventTypes } from '../events/EventTypes.js';
+import { EventTypes, EventPayload } from '../events/BotEvents.js';
 
 const getPrice = async (): Promise<string> => {
   const details = await getTradingDetails(SETTINGS.SOLOGENIC.FORMATTED_TOKEN);

@@ -1,6 +1,5 @@
 import SETTINGS from '../settings.js';
 import mongodb from 'mongodb';
-import { Wallet } from 'xrpl';
 const { MongoClient } = mongodb;
 
 const deleteWallet = async (address: string): Promise<number> => {

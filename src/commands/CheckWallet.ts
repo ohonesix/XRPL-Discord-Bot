@@ -1,8 +1,7 @@
 import getWalletAddress from '../utils/getWalletAddress.js';
 import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings.js';
 import { Message } from 'discord.js';
-import EventPayload from '../events/EventPayload.js';
-import { EventTypes } from '../events/EventTypes.js';
+import { EventTypes, EventPayload } from '../events/BotEvents.js';
 
 const checkWallet = async (message: Message) => {
   // Get address

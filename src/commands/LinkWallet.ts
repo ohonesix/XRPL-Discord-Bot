@@ -2,11 +2,10 @@ import getWalletAddress from '../utils/getWalletAddress.js';
 import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings.js';
 import { updateUserWallet } from '../data/updateUserWallet.js';
 import { updateUserRoles } from '../integration/discord/updateUserRoles.js';
-import { Client, User, Interaction } from 'discord.js';
+import { Client, User } from 'discord.js';
 import truncate from '../utils/truncate.js';
 import { WalletUpdateResponse } from '../models/enum/walletUpdateResponse.js';
-import EventPayload from '../events/EventPayload.js';
-import { EventTypes } from '../events/EventTypes.js';
+import { EventTypes, EventPayload } from '../events/BotEvents.js';
 
 const linkWallet = async (
   message: string,

@@ -1,5 +1,4 @@
-import EventPayload from '../events/EventPayload.js';
-import { EventTypes } from '../events/EventTypes.js';
+import { EventTypes, EventPayload } from '../events/BotEvents.js';
 
 const eventCallback = async (payload: EventPayload) => {
   if (payload.handled) {

@@ -6,8 +6,7 @@ import { getUserAccountIdByUsername } from '../integration/discord/getUserAccoun
 import { updateUserWallet } from '../data/updateUserWallet.js';
 import { updateUserRoles } from '../integration/discord/updateUserRoles.js';
 import { Client, Message } from 'discord.js';
-import EventPayload from '../events/EventPayload.js';
-import { EventTypes } from '../events/EventTypes.js';
+import { EventTypes, EventPayload } from '../events/BotEvents.js';
 
 const adminLinkWallet = async (message: Message, client: Client) => {
   if (!isAdmin(message.author.id)) {

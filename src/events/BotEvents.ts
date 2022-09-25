@@ -4,7 +4,13 @@
 // However this does mean other listeners need to respect if the
 // event has been handled.
 import { Client, Message, CommandInteraction } from 'discord.js';
-export default class EventPayload {
+
+enum EventTypes {
+  MESSAGE,
+  INTERACTION,
+}
+
+class EventPayload {
   public message: Message;
   public messageLowered: string; // used to trigger commands
   public client: Client;
@@ -30,3 +36,5 @@ export default class EventPayload {
     this.handled = handled;
   }
 }
+
+export { EventTypes, EventPayload };

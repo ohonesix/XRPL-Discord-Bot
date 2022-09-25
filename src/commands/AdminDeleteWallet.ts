@@ -2,8 +2,7 @@ import getWalletAddress from '../utils/getWalletAddress.js';
 import isAdmin from '../utils/isAdmin.js';
 import { deleteWallet } from '../data/deleteWallet.js';
 import { Message } from 'discord.js';
-import EventPayload from '../events/EventPayload.js';
-import { EventTypes } from '../events/EventTypes.js';
+import { EventTypes, EventPayload } from '../events/BotEvents.js';
 
 const adminDeleteWallet = async (message: Message) => {
   if (!isAdmin(message.author.id)) {

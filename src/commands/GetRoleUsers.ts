@@ -2,10 +2,9 @@ import { Client, Message, Role } from 'discord.js';
 import isAdmin from '../utils/isAdmin.js';
 import getRole from '../utils/getRole.js';
 import SETTINGS from '../settings.js';
-import EventPayload from '../events/EventPayload.js';
-import { EventTypes } from '../events/EventTypes.js';
+import { EventTypes, EventPayload } from '../events/BotEvents.js';
 
-const getUsersForRole = async (message: Message, client: Client) => {
+const getRoleUsers = async (message: Message, client: Client) => {
   if (!isAdmin(message.author.id)) {
     return message.reply(`Sorry you are not autorised to do that.`);
   }
@@ -27,7 +26,7 @@ const getUsersForRole = async (message: Message, client: Client) => {
 
   if (members === null) {
     return message.reply(
-      'Cant find a role with that name, please check the spelling and try again with command as "getusers ROLENAME"'
+      'Cant find a role with that name, please check the spelling and try again with command as "getusersforole ROLENAME"'
     );
   }
 
@@ -42,15 +41,15 @@ const getUsersForRole = async (message: Message, client: Client) => {
 
 const eventCallback = async (payload: EventPayload) => {
   if (
-    payload.messageLowered.includes('get users') ||
-    payload.messageLowered.includes('getusers')
+    payload.messageLowered.includes('get role users') ||
+    payload.messageLowered.includes('getroleusers')
   ) {
     payload.handled = true;
-    return await getUsersForRole(payload.message, payload.client);
+    return await getRoleUsers(payload.message, payload.client);
   }
 };
 
-export default class GetUsersForRole {
+export default class GetRoleUsers {
   public static setup(eventEmitter: any): void {
     eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
   }

@@ -1,7 +1,6 @@
 // tslint:disable-next-line
 const EventEmitter = require('eventemitter3');
-import { EventTypes } from './EventTypes';
-import EventPayload from './EventPayload';
+import { EventTypes, EventPayload } from './BotEvents';
 import { Message, Client, CommandInteraction } from 'discord.js';
 
 // A simple wrapper that extends the default EventEmitter so

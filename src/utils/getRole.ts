@@ -1,9 +1,13 @@
-const getRole = (input: string) => {
-  if (input === null) {
+const getRole = (message: string) => {
+  if (message === null) {
     return null;
   }
 
-  return input.substring(9).trim();
+  const role = message
+    .replace('getroleusers', '')
+    .replace('get role users', '')
+    .trim();
+  return role;
 };
 
 export default getRole;

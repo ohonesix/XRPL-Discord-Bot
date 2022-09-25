@@ -1,7 +1,6 @@
 import isAdmin from '../utils/isAdmin.js';
 import { Message } from 'discord.js';
-import EventPayload from '../events/EventPayload.js';
-import { EventTypes } from '../events/EventTypes.js';
+import { EventTypes, EventPayload } from '../events/BotEvents.js';
 
 const help = async (message: Message) => {
   let reply = `You can
@@ -13,10 +12,9 @@ const help = async (message: Message) => {
     reply += `\nAdmin commands
     - Link a wallet to user account using: 'adminlinkwallet WALLETADDRESSHERE DISCORDUSER#NUMBER'
     - Delete a wallet from the system using: 'admindeletewallet WALLETADDRESSHERE'
-    - Get all users in a role using: 'getusers ROLENAME'
-    - Get a users wallet address using: 'getwallet DISCORDUSER#NUMBER'
-    - Get a wallet user by address using: 'getwallet WALLETADDRESSHERE'
-    - Verify if a username is linked to a wallet using 'verifywallet WALLETADDRESSHERE DISCORDUSER#NUMBER'
+    - Get all users in a role using: 'getroleusers ROLENAME'
+    - Get a user's wallet address using: 'getwallet DISCORDUSER#NUMBER'
+    - Get a wallet user by address using: 'getuser WALLETADDRESSHERE'
     `;
   }
 
