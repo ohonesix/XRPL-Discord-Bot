@@ -38,6 +38,10 @@ const getUser = async (message: Message, client: Client) => {
 };
 
 const eventCallback = async (payload: EventPayload) => {
+  if (payload.handled) {
+    return;
+  }
+
   if (
     payload.messageLowered.includes('get user') ||
     payload.messageLowered.includes('getuser')

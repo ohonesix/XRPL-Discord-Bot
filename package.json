@@ -1,7 +1,11 @@
 {
   "name": "XRPL-Discord-Bot",
-  "version": "0.8.0",
+  "version": "1.0.0",
   "description": "A customisable open-source Discord bot that brings the power of the XRPL to Discord communities.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jacobpretorius/XRPL-Discord-Bot"
+  },
   "main": "dist/app.js",
   "engines": {
     "node": "16.17.x"

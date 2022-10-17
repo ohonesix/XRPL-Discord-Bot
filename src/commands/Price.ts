@@ -17,6 +17,10 @@ const getPrice = async (): Promise<string> => {
 };
 
 const eventCallback = async (payload: EventPayload) => {
+  if (payload.handled) {
+    return;
+  }
+
   if (payload.interaction.commandName === 'price') {
     payload.handled = true;
 

@@ -40,6 +40,10 @@ const getRoleUsers = async (message: Message, client: Client) => {
 };
 
 const eventCallback = async (payload: EventPayload) => {
+  if (payload.handled) {
+    return;
+  }
+
   if (
     payload.messageLowered.includes('get role users') ||
     payload.messageLowered.includes('getroleusers')

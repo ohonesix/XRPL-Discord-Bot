@@ -62,6 +62,10 @@ const adminLinkWallet = async (message: Message, client: Client) => {
 };
 
 const eventCallback = async (payload: EventPayload) => {
+  if (payload.handled) {
+    return;
+  }
+
   if (
     payload.messageLowered.includes('admin link wallet') ||
     payload.messageLowered.includes('adminlinkwallet')

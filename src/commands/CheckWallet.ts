@@ -32,6 +32,10 @@ const checkWallet = async (message: Message) => {
 };
 
 const eventCallback = async (payload: EventPayload) => {
+  if (payload.handled) {
+    return;
+  }
+
   if (
     payload.messageLowered.includes('check wallet') ||
     payload.messageLowered.includes('checkwallet')

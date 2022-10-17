@@ -116,6 +116,10 @@ const linkWallet = async (
 };
 
 const eventCallbackOnMessage = async (payload: EventPayload) => {
+  if (payload.handled) {
+    return;
+  }
+
   if (
     payload.messageLowered.includes('link wallet') ||
     payload.messageLowered.includes('linkwallet')
@@ -134,6 +138,10 @@ const eventCallbackOnMessage = async (payload: EventPayload) => {
 };
 
 const eventCallbackOnInteraction = async (payload: EventPayload) => {
+  if (payload.handled) {
+    return;
+  }
+
   if (payload.interaction.commandName === 'linkwallet') {
     payload.handled = true;
 

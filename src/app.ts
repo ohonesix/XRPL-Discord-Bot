@@ -103,7 +103,7 @@ const webServer = express();
 
 webServer.get('/', async (req, res) => {
   res.send(
-    'The XRPL Discord Bot is running! <a href="https://ohonesix.com/xrpl-discord-bot">Check for updates</a>'
+    'The XRPL Discord Bot is running! See <a href="https://github.com/jacobpretorius/XRPL-Discord-Bot">here for updates</a>'
   );
 });
 

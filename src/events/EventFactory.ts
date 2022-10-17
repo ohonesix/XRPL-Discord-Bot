@@ -28,15 +28,16 @@ export default class EventFactory {
 
     // Setup all command listeners by giving them the event emitter to add their lister
     // Do note that javascript calls these in order, so top to bottom fired per event.
-    // If only typeScript had statics in interfaces this could be much nicer!
+    // Sequencing is important if one command word contains another e.g. 'adminlinkwallet' contains the 'linkwallet' command
+    // so we need to check for 'adminlinkwallet' first (and set it to handled if that was the command issued).
     Help.setup(this.eventEmitter);
     CheckWallet.setup(this.eventEmitter);
     GetRoleUsers.setup(this.eventEmitter);
     GetUser.setup(this.eventEmitter);
     GetWallet.setup(this.eventEmitter);
-    LinkWallet.setup(this.eventEmitter);
     AdminLinkWallet.setup(this.eventEmitter);
     AdminDeleteWallet.setup(this.eventEmitter);
+    LinkWallet.setup(this.eventEmitter);
     Price.setup(this.eventEmitter);
     About.setup(this.eventEmitter);
     Unknown.setup(this.eventEmitter);
