@@ -8,12 +8,13 @@ if (SETTINGS.APPLICATION_INSIGHTS.ENABLED) {
 const LOGGER = appInsights?.defaultClient ?? null;
 
 import express from 'express';
+import bodyParser from 'body-parser';
 import { Client, Intents, Message, Interaction } from 'discord.js';
 import EventFactory from './events/EventFactory';
 import { EventTypes } from './events/BotEvents';
-
 import { scanLinkedWallets } from './business/scanLinkedWallets.js';
 import { scanLinkedAccounts } from './business/scanLinkedAccounts.js';
+import xummWebhook from './integration/xumm/webhook.js';
 
 // Discord Client
 const discordClient = new Client({
@@ -129,6 +130,16 @@ webServer.get('/updateWallets', async (req, res) => {
 
 webServer.get('/updateAccounts', async (req, res) => {
   res.send(await scanLinkedAccounts(discordClient, LOGGER));
+});
+
+webServer.use('/xummWebhook', bodyParser.json());
+
+webServer.post('/xummWebhook', async (req, res) => {
+  if (SETTINGS.XUMM.ENABLED) {
+    await xummWebhook(req.body, discordClient);
+  }
+
+  res.send({ status: 'OK' });
 });
 
 webServer.listen(SETTINGS.APP.PORT, async () => {
