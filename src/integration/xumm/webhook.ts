@@ -1,4 +1,4 @@
-import SETTINGS from '../../Settings.js';
+import SETTINGS from '../../settings.js';
 import { XummTypes, XummSdk } from 'xumm-sdk';
 import { Client, MessagePayload, MessageOptions } from 'discord.js';
 import { linkWalletToDiscordAccount } from '../../business/linkWalletToDiscordAccount.js';
