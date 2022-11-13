@@ -1,6 +1,6 @@
 {
   "name": "XRPL-Discord-Bot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A customisable open-source Discord bot that brings the power of the XRPL to Discord communities.",
   "repository": {
     "type": "git",
