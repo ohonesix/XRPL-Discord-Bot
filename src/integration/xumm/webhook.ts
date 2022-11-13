@@ -1,6 +1,7 @@
 import SETTINGS from '../../Settings.js';
 import { XummTypes, XummSdk } from 'xumm-sdk';
 import { Client, MessagePayload, MessageOptions } from 'discord.js';
+import { linkWalletToDiscordAccount } from '../../business/linkWalletToDiscordAccount.js';
 
 const xummWebhook = async (body: XummTypes.XummWebhookBody, client: Client) => {
   // Setup the xumm server session
@@ -37,8 +38,15 @@ const xummWebhook = async (body: XummTypes.XummWebhookBody, client: Client) => {
   // Get the users linked wallet address
   const walletAddress = resultLogin.response.account;
 
-  // TODO process the wallet adding
-  return await user.send('I see you at ' + walletAddress);
+  const message = await linkWalletToDiscordAccount(
+    walletAddress,
+    true, // User is verified when singed using XUMM
+    user,
+    client,
+    null
+  );
+
+  return user.send(message);
 };
 
 export default xummWebhook;
