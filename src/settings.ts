@@ -54,6 +54,18 @@ const SETTINGS = {
     // In the format "TOKENHASH+ISSUERWALLET/XRP" e.g. "7850697A7A610000000000000000000000000000+rUMwLWFzwcD2topAKsg5NBbhq7dtu4gRCU/XRP"
     FORMATTED_TOKEN: process.env.SOLOGENIC_FORMATTED_TOKEN || 'replace-me',
   },
+  XUMM: {
+    // ENABLED
+    // Turn on the ability to link wallets using XUMM
+    // ENABLED: process.env.XUMM_ENABLED === 'true' ? true : false,
+    ENABLED: false,
+    // API_KEY
+    // You get this when you create the application in the XUMM Developer Console
+    API_KEY: 'replace-me',
+    // API_SECRET
+    // You get this when you create the application in the XUMM Developer Console
+    API_SECRET: 'replace-me',
+  },
   DISCORD_ROLES: {
     // ROLES_BY_POINTS
     // The roles to give users based on amount/points holdings in their linked wallet(s)
@@ -62,6 +74,7 @@ const SETTINGS = {
     ROLES_BY_POINTS: [
       { 'replace-me': 1 },
       { 'replace-me': 8 },
+      { 'replace-me': 25 },
     ],
     // ROLES_BY_TOKEN
     // Reserved for future use.

@@ -38,7 +38,7 @@ const adminLinkWallet = async (message: Message, client: Client) => {
   const newWallet: IWallet = {
     address: walletAddress,
     points: holdings,
-    verified: false, // todo when we have XUMM integration
+    verified: false,
   };
 
   const newUser: IBotUser = {
