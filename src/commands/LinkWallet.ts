@@ -91,13 +91,37 @@ const eventCallbackOnInteraction = async (payload: EventPayload) => {
   if (payload.interaction.commandName === 'linkwallet') {
     payload.handled = true;
 
+    let result = await linkWallet(
+      payload.interaction.options.getString('wallet-address'),
+      payload.interaction.user,
+      payload.client,
+      payload.logger
+    );
+
+    // Standard text based flow
+    if (!SETTINGS.XUMM.ENABLED) {
+      await payload.interaction.reply({
+        content: result,
+        ephemeral: true,
+      });
+      return;
+    }
+
+    // Error with xumm setup
+    if (result === null) {
+      result = 'Error with XUMM, please try again later.';
+    }
+
+    // We have a QR code url to return for the xumm login
     await payload.interaction.reply({
-      content: await linkWallet(
-        payload.interaction.options.getString('wallet-address'),
-        payload.interaction.user,
-        payload.client,
-        payload.logger
-      ),
+      content: 'Scan the QR code using your xumm wallet',
+      embeds: [
+        {
+          image: {
+            url: result,
+          },
+        },
+      ],
       ephemeral: true,
     });
     return;

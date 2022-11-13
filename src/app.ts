@@ -36,14 +36,16 @@ const commands = [
   {
     name: 'linkwallet',
     description: 'Link your wallet to get server roles',
-    options: [
-      {
-        type: 3,
-        name: 'wallet-address',
-        description: 'Your XRP Wallet Address',
-        required: true,
-      },
-    ],
+    options: SETTINGS.XUMM.ENABLED
+      ? null
+      : [
+          {
+            type: 3,
+            name: 'wallet-address',
+            description: 'Your XRP Wallet Address',
+            required: true,
+          },
+        ],
   },
   {
     name: 'price',
