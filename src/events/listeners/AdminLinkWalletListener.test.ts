@@ -1,9 +1,9 @@
 import { EventTypes } from '../BotEvents';
-import AboutListener from './AboutListener';
+import AdminLinkWalletListener from './AdminLinkWalletListener';
 import CustomEmitter from '../CustomEmitter';
-import about from '../../commands/about';
+import adminLinkWallet from '../../commands/adminLinkWallet';
 
-describe('AboutListener', () => {
+describe('AdminLinkWalletListener', () => {
   let mockEventEmitter: CustomEmitter;
 
   beforeAll(() => {
@@ -14,10 +14,10 @@ describe('AboutListener', () => {
   });
 
   test('setup registers a listener on given EventEmitter', () => {
-    AboutListener.setup(mockEventEmitter);
+    AdminLinkWalletListener.setup(mockEventEmitter);
     expect(mockEventEmitter.addListener).toHaveBeenCalledWith(
       EventTypes.MESSAGE,
-      about
+      adminLinkWallet
     );
   });
 });

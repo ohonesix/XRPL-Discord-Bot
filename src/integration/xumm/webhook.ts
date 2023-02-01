@@ -1,7 +1,7 @@
-import SETTINGS from '../../settings.js';
+import SETTINGS from '../../settings';
 import { XummTypes, XummSdk } from 'xumm-sdk';
 import { Client, MessagePayload, MessageOptions } from 'discord.js';
-import { linkWalletToDiscordAccount } from '../../business/linkWalletToDiscordAccount.js';
+import { linkWalletToDiscordAccount } from '../../business/linkWalletToDiscordAccount';
 
 const xummWebhook = async (body: XummTypes.XummWebhookBody, client: Client) => {
   // Setup the xumm server session

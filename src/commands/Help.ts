@@ -1,8 +1,8 @@
-import isAdmin from '../utils/isAdmin.js';
+import isAdmin from '../utils/isAdmin';
 import { Message } from 'discord.js';
-import { EventTypes, EventPayload } from '../events/BotEvents.js';
+import { EventPayload } from '../events/BotEvents';
 
-const help = async (message: Message) => {
+const processCommand = async (message: Message) => {
   let reply = `You can
   - Link a wallet to your account using: 'linkwallet WALLETADDRESSHERE'
   - Check wallet points using: 'checkwallet WALLETADDRESSHERE'
@@ -21,7 +21,7 @@ const help = async (message: Message) => {
   return message.reply(reply);
 };
 
-const eventCallback = async (payload: EventPayload) => {
+const help = async (payload: EventPayload) => {
   if (payload.handled) {
     return;
   }
@@ -31,12 +31,8 @@ const eventCallback = async (payload: EventPayload) => {
     payload.messageLowered.includes('help')
   ) {
     payload.handled = true;
-    return await help(payload.message);
+    return await processCommand(payload.message);
   }
 };
 
-export default class Help {
-  public static setup(eventEmitter: any): void {
-    eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
-  }
-}
+export default help;

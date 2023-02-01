@@ -1,7 +1,7 @@
-import sleep from '../utils/sleep.js';
-import { getAllUsers } from '../data/getAllUsers.js';
-import { updateUserAccount } from '../data/updateUserAccount.js';
-import { getUserAccountById } from '../integration/discord/getUserAccountById.js';
+import sleep from '../utils/sleep';
+import { getAllUsers } from '../data/getAllUsers';
+import { updateUserAccount } from '../data/updateUserAccount';
+import { getUserAccountById } from '../integration/discord/getUserAccountById';
 import { Client } from 'discord.js';
 
 // Tracks users changing their Discord username

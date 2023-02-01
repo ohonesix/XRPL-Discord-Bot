@@ -1,6 +1,6 @@
-import SETTINGS from '../settings.js';
+import SETTINGS from '../settings';
 import mongodb from 'mongodb';
-import { WalletUpdateResponse } from '../models/enum/WalletUpdateResponse.js';
+import { WalletUpdateResponse } from '../models/enum/WalletUpdateResponse';
 const { MongoClient } = mongodb;
 
 const updateUserWallet = async (

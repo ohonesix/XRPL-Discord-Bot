@@ -1,9 +1,9 @@
-import getWalletAddress from '../utils/getWalletAddress.js';
+import getWalletAddress from '../utils/getWalletAddress';
 import { Client, User, MessagePayload, MessageOptions } from 'discord.js';
-import { EventTypes, EventPayload } from '../events/BotEvents.js';
-import { linkWalletToDiscordAccount } from '../business/linkWalletToDiscordAccount.js';
-import signIn from '../integration/xumm/signIn.js';
-import SETTINGS from '../settings.js';
+import { EventPayload } from '../events/BotEvents';
+import { linkWalletToDiscordAccount } from '../business/linkWalletToDiscordAccount';
+import signIn from '../integration/xumm/signIn';
+import SETTINGS from '../settings';
 
 const linkWallet = async (
   message: string,
@@ -128,13 +128,5 @@ const eventCallbackOnInteraction = async (payload: EventPayload) => {
   }
 };
 
-export default class LinkWallet {
-  public static setup(eventEmitter: any): void {
-    eventEmitter.addListener(EventTypes.MESSAGE, eventCallbackOnMessage);
-
-    eventEmitter.addListener(
-      EventTypes.INTERACTION,
-      eventCallbackOnInteraction
-    );
-  }
-}
+// We have to process each a little differently, so export both
+export { eventCallbackOnMessage, eventCallbackOnInteraction };

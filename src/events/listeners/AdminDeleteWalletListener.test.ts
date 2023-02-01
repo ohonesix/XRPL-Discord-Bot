@@ -6,7 +6,7 @@ import adminDeleteWallet from '../../commands/adminDeleteWallet';
 describe('AdminDeleteWalletListener', () => {
   let mockEventEmitter: CustomEmitter;
 
-  beforeEach(() => {
+  beforeAll(() => {
     mockEventEmitter = {
       addListener: jest.fn(),
       emitPayload: jest.fn(),

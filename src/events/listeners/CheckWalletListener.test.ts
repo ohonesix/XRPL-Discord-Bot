@@ -1,9 +1,9 @@
 import { EventTypes } from '../BotEvents';
-import AboutListener from './AboutListener';
+import CheckWalletListener from './CheckWalletListener';
 import CustomEmitter from '../CustomEmitter';
-import about from '../../commands/about';
+import checkWallet from '../../commands/checkWallet';
 
-describe('AboutListener', () => {
+describe('CheckWalletListener', () => {
   let mockEventEmitter: CustomEmitter;
 
   beforeAll(() => {
@@ -14,10 +14,10 @@ describe('AboutListener', () => {
   });
 
   test('setup registers a listener on given EventEmitter', () => {
-    AboutListener.setup(mockEventEmitter);
+    CheckWalletListener.setup(mockEventEmitter);
     expect(mockEventEmitter.addListener).toHaveBeenCalledWith(
       EventTypes.MESSAGE,
-      about
+      checkWallet
     );
   });
 });

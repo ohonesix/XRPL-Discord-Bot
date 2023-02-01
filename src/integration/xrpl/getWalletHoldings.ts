@@ -1,5 +1,5 @@
-import SETTINGS from '../../settings.js';
-import sleep from '../../utils/sleep.js';
+import SETTINGS from '../../settings';
+import sleep from '../../utils/sleep';
 // tslint:disable-next-line
 const XRPL = require('xrpl');
 

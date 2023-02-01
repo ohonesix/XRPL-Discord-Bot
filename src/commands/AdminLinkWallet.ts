@@ -1,14 +1,14 @@
-import getWalletAddress from '../utils/getWalletAddress.js';
-import getUserNameFromAdminLinkWalletCommand from '../utils/getUserNameFromAdminLinkWalletCommand.js';
-import isAdmin from '../utils/isAdmin.js';
-import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings.js';
-import { getUserAccountIdByUsername } from '../integration/discord/getUserAccountIdByUsername.js';
-import { updateUserWallet } from '../data/updateUserWallet.js';
-import { updateUserRoles } from '../integration/discord/updateUserRoles.js';
+import getWalletAddress from '../utils/getWalletAddress';
+import getUserNameFromAdminLinkWalletCommand from '../utils/getUserNameFromAdminLinkWalletCommand';
+import isAdmin from '../utils/isAdmin';
+import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings';
+import { getUserAccountIdByUsername } from '../integration/discord/getUserAccountIdByUsername';
+import { updateUserWallet } from '../data/updateUserWallet';
+import { updateUserRoles } from '../integration/discord/updateUserRoles';
+import { EventPayload } from '../events/BotEvents';
 import { Client, Message } from 'discord.js';
-import { EventTypes, EventPayload } from '../events/BotEvents.js';
 
-const adminLinkWallet = async (message: Message, client: Client) => {
+const processCommand = async (message: Message, client: Client) => {
   if (!isAdmin(message.author.id)) {
     return message.reply(`Sorry you are not autorised to do that.`);
   }
@@ -61,7 +61,7 @@ const adminLinkWallet = async (message: Message, client: Client) => {
   return message.reply(`I see their ${holdings} points admin! Linked 🚀`);
 };
 
-const eventCallback = async (payload: EventPayload) => {
+const adminLinkWallet = async (payload: EventPayload) => {
   if (payload.handled) {
     return;
   }
@@ -71,12 +71,8 @@ const eventCallback = async (payload: EventPayload) => {
     payload.messageLowered.includes('adminlinkwallet')
   ) {
     payload.handled = true;
-    return await adminLinkWallet(payload.message, payload.client);
+    return await processCommand(payload.message, payload.client);
   }
 };
 
-export default class AdminLinkWallet {
-  public static setup(eventEmitter: any): void {
-    eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
-  }
-}
+export default adminLinkWallet;
