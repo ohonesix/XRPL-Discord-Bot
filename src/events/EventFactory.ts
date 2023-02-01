@@ -11,9 +11,9 @@ import GetUser from '../commands/GetUser';
 import GetWallet from '../commands/GetWallet';
 import LinkWallet from '../commands/LinkWallet';
 import AdminLinkWallet from '../commands/AdminLinkWallet';
-import AdminDeleteWallet from '../commands/AdminDeleteWallet';
+import AdminDeleteWalletListener from './listeners/AdminDeleteWalletListener';
 import Price from '../commands/Price';
-import About from '../commands/About';
+import About from './listeners/AboutListener';
 import Unknown from '../commands/Unknown';
 
 export default class EventFactory {
@@ -36,7 +36,7 @@ export default class EventFactory {
     GetUser.setup(this.eventEmitter);
     GetWallet.setup(this.eventEmitter);
     AdminLinkWallet.setup(this.eventEmitter);
-    AdminDeleteWallet.setup(this.eventEmitter);
+    AdminDeleteWalletListener.setup(this.eventEmitter);
     LinkWallet.setup(this.eventEmitter);
     Price.setup(this.eventEmitter);
     About.setup(this.eventEmitter);
