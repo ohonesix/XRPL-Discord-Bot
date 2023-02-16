@@ -4,17 +4,17 @@
 import CustomEmitter from './CustomEmitter';
 
 // Import everything that registers listeners into the factory
-import HelpListener from './listeners/helpListener';
+import HelpListener from './listeners/HelpListener';
 import CheckWalletListener from './listeners/CheckWalletListener';
-import GetRoleUsersListener from './listeners/getRoleUsersListener';
-import GetUserListener from './listeners/getUserListener';
-import GetWalletListener from './listeners/getWalletListener';
-import LinkWalletListener from './listeners/linkWalletListener';
+import GetRoleUsersListener from './listeners/GetRoleUsersListener';
+import GetUserListener from './listeners/GetUserListener';
+import GetWalletListener from './listeners/GetWalletListener';
+import LinkWalletListener from './listeners/LinkWalletListener';
 import AdminLinkWalletListener from './listeners/AdminLinkWalletListener';
 import AdminDeleteWalletListener from './listeners/AdminDeleteWalletListener';
-import PriceListener from './listeners/priceListener';
+import PriceListener from './listeners/PriceListener';
 import AboutListener from './listeners/AboutListener';
-import UnknownListener from './listeners/unknownListener';
+import UnknownListener from './listeners/UnknownListener';
 
 export default class EventFactory {
   // We only want one singleton instance to prevent memory leaks.
