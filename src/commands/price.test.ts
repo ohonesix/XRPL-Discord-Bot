@@ -6,7 +6,7 @@ import { jest } from '@jest/globals';
 
 jest.mock('../integration/sologenic/getTradingDetails');
 
-describe('checkWallet command logic', () => {
+describe('price interaction logic', () => {
   let interaction: CommandInteraction;
   let payload: any;
 
@@ -27,7 +27,7 @@ describe('checkWallet command logic', () => {
     jest.resetAllMocks();
   });
 
-  it('calls message.reply when payload.handled is false', async () => {
+  it('calls interaction.reply when payload.handled is false', async () => {
     payload.handled = false;
 
     await price(payload);
@@ -35,7 +35,7 @@ describe('checkWallet command logic', () => {
     expect(interaction.reply).toHaveBeenCalled();
   });
 
-  it('does not call message.reply when payload.handled is true', async () => {
+  it('does not call interaction.reply when payload.handled is true', async () => {
     payload.handled = true;
 
     await price(payload);
@@ -43,7 +43,7 @@ describe('checkWallet command logic', () => {
     expect(interaction.reply).not.toHaveBeenCalled();
   });
 
-  it('calls message.reply with error message when network issue', async () => {
+  it('calls interaction.reply with error message when network issue', async () => {
     (
       getTradingDetails as jest.MockedFunction<typeof getTradingDetails>
     ).mockReturnValue(Promise.resolve(null));
@@ -55,7 +55,7 @@ describe('checkWallet command logic', () => {
     });
   });
 
-  it('calls message.reply with last trading price if all ok', async () => {
+  it('calls interaction.reply with last trading price if all ok', async () => {
     const priceRes = 4.12;
     const volume = 24.01;
 

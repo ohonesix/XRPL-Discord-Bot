@@ -13,7 +13,7 @@ const linkWallet = async (
 ): Promise<string> => {
   if (SETTINGS.XUMM.ENABLED) {
     const loginResponse = await signIn(user.id);
-    if (loginResponse.signInQrUrl) {
+    if (loginResponse?.signInQrUrl) {
       return loginResponse.signInQrUrl;
     }
 
@@ -68,7 +68,7 @@ const eventCallbackOnMessage = async (payload: EventPayload) => {
 
     // We have a QR code url to return for the xumm login
     const options: MessageOptions = {
-      content: 'Scan the QR code using your xumm wallet',
+      content: `Scan the QR code using your xumm wallet or visit ${result}`,
       embeds: [
         {
           image: {
@@ -109,21 +109,25 @@ const eventCallbackOnInteraction = async (payload: EventPayload) => {
 
     // Error with xumm setup
     if (result === null) {
-      result = 'Error with XUMM, please try again later.';
+      await payload.interaction.reply({
+        content: 'Error with XUMM, please try again later.',
+        ephemeral: true,
+      });
+    } else {
+      // We have a QR code url to return for the xumm login
+      await payload.interaction.reply({
+        content: `Scan the QR code using your xumm wallet or visit ${result}`,
+        embeds: [
+          {
+            image: {
+              url: result,
+            },
+          },
+        ],
+        ephemeral: true,
+      });
     }
 
-    // We have a QR code url to return for the xumm login
-    await payload.interaction.reply({
-      content: 'Scan the QR code using your xumm wallet',
-      embeds: [
-        {
-          image: {
-            url: result,
-          },
-        },
-      ],
-      ephemeral: true,
-    });
     return;
   }
 };
