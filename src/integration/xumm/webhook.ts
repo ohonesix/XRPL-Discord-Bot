@@ -40,7 +40,7 @@ const xummWebhook = async (body: XummTypes.XummWebhookBody, client: Client) => {
 
   const message = await linkWalletToDiscordAccount(
     walletAddress,
-    true, // User is verified when singed using XUMM
+    true, // User is verified when signed in using XUMM
     user,
     client,
     null

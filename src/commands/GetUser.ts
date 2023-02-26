@@ -6,7 +6,7 @@ import { EventPayload } from '../events/BotEvents';
 
 const processCommand = async (message: Message, client: Client) => {
   if (!isAdmin(message.author.id)) {
-    return message.reply(`Sorry you are not autorised to do that.`);
+    return message.reply(`Sorry you are not authorised to do that.`);
   }
 
   const walletAddress = getWalletAddress(message.content);
