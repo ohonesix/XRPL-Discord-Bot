@@ -20,6 +20,8 @@ jest.mock('../business/linkWalletToDiscordAccount');
 jest.mock('../integration/xumm/signIn');
 
 const mockWallet = 'rnruxxaTbJUMNtFNBJ7X2xSiy1KE7ajUuH';
+const mockQrUrl = 'https://ohonesix.com/qr';
+const mockSignInUrl = 'https://ohonesix.com';
 
 describe('linkWallet message logic without XUMM login', () => {
   let message: Message;
@@ -131,10 +133,10 @@ describe('linkWallet message logic with XUMM login', () => {
   });
 
   it('returns formatted QR code message when given from XUMM', async () => {
-    const mockSignInUrl = 'https://ohonesix.com';
     (signIn as jest.MockedFunction<typeof signIn>).mockReturnValue(
       Promise.resolve({
-        signInQrUrl: mockSignInUrl,
+        signInQrUrl: mockQrUrl,
+        signInDirectLink: mockSignInUrl,
       })
     );
 
@@ -143,7 +145,7 @@ describe('linkWallet message logic with XUMM login', () => {
       embeds: [
         {
           image: {
-            url: mockSignInUrl,
+            url: mockQrUrl,
           },
         },
       ],
@@ -273,10 +275,10 @@ describe('linkWallet interaction logic with XUMM login', () => {
   });
 
   it('returns formatted QR code message when given from XUMM', async () => {
-    const mockSignInUrl = 'https://ohonesix.com';
     (signIn as jest.MockedFunction<typeof signIn>).mockReturnValue(
       Promise.resolve({
-        signInQrUrl: mockSignInUrl,
+        signInQrUrl: mockQrUrl,
+        signInDirectLink: mockSignInUrl,
       })
     );
 
@@ -287,7 +289,7 @@ describe('linkWallet interaction logic with XUMM login', () => {
       embeds: [
         {
           image: {
-            url: mockSignInUrl,
+            url: mockQrUrl,
           },
         },
       ],

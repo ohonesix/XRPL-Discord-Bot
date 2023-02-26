@@ -16,6 +16,7 @@ const signIn = async (discordId: string) => {
 
   return {
     signInQrUrl: payload.refs.qr_png,
+    signInDirectLink: payload.next.always,
   };
 };
 

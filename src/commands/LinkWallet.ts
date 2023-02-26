@@ -10,11 +10,11 @@ const linkWallet = async (
   user: User,
   client: Client,
   LOGGER: any
-): Promise<string> => {
+): Promise<any> => {
   if (SETTINGS.XUMM.ENABLED) {
     const loginResponse = await signIn(user.id);
     if (loginResponse?.signInQrUrl) {
-      return loginResponse.signInQrUrl;
+      return loginResponse;
     }
 
     return null;
@@ -68,11 +68,11 @@ const eventCallbackOnMessage = async (payload: EventPayload) => {
 
     // We have a QR code url to return for the xumm login
     const options: MessageOptions = {
-      content: `Scan the QR code using your xumm wallet or visit ${result}`,
+      content: `Scan the QR code using your xumm wallet or visit ${result.signInDirectLink}`,
       embeds: [
         {
           image: {
-            url: result,
+            url: result.signInQrUrl,
           },
         },
       ],
@@ -91,7 +91,7 @@ const eventCallbackOnInteraction = async (payload: EventPayload) => {
   if (payload.interaction.commandName === 'linkwallet') {
     payload.handled = true;
 
-    let result = await linkWallet(
+    const result = await linkWallet(
       payload.interaction.options.getString('wallet-address'),
       payload.interaction.user,
       payload.client,
@@ -116,11 +116,11 @@ const eventCallbackOnInteraction = async (payload: EventPayload) => {
     } else {
       // We have a QR code url to return for the xumm login
       await payload.interaction.reply({
-        content: `Scan the QR code using your xumm wallet or visit ${result}`,
+        content: `Scan the QR code using your xumm wallet or visit ${result.signInDirectLink}`,
         embeds: [
           {
             image: {
-              url: result,
+              url: result.signInQrUrl,
             },
           },
         ],
