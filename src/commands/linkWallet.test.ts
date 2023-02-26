@@ -45,7 +45,7 @@ describe('linkWallet message logic without XUMM login', () => {
     jest.resetAllMocks();
   });
 
-  it('does not call message.reply when payload.handled is true', async () => {
+  it('does not reply when payload.handled is true', async () => {
     payload.handled = true;
 
     await eventCallbackOnMessage(payload);
@@ -112,7 +112,7 @@ describe('linkWallet message logic with XUMM login', () => {
     jest.resetAllMocks();
   });
 
-  it('does not call message.reply when payload.handled is true', async () => {
+  it('does not reply when payload.handled is true', async () => {
     payload.handled = true;
 
     await eventCallbackOnMessage(payload);

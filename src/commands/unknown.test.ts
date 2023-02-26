@@ -31,7 +31,7 @@ describe('unknown command logic', () => {
     expect(message.reply).toHaveBeenCalled();
   });
 
-  it('does not call message.reply when payload.handled is true', async () => {
+  it('does not reply when payload.handled is true', async () => {
     payload.handled = true;
 
     await unknown(payload);
