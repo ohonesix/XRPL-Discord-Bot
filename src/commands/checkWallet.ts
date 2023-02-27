@@ -1,9 +1,9 @@
-import getWalletAddress from '../utils/getWalletAddress.js';
-import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings.js';
+import getWalletAddress from '../utils/getWalletAddress';
+import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings';
 import { Message } from 'discord.js';
-import { EventTypes, EventPayload } from '../events/BotEvents.js';
+import { EventPayload } from '../events/BotEvents';
 
-const checkWallet = async (message: Message) => {
+const processCommand = async (message: Message) => {
   // Get address
   const walletAddress = getWalletAddress(message.content);
 
@@ -31,7 +31,7 @@ const checkWallet = async (message: Message) => {
   );
 };
 
-const eventCallback = async (payload: EventPayload) => {
+const checkWallet = async (payload: EventPayload) => {
   if (payload.handled) {
     return;
   }
@@ -41,12 +41,8 @@ const eventCallback = async (payload: EventPayload) => {
     payload.messageLowered.includes('checkwallet')
   ) {
     payload.handled = true;
-    return await checkWallet(payload.message);
+    return await processCommand(payload.message);
   }
 };
 
-export default class CheckWallet {
-  public static setup(eventEmitter: any): void {
-    eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
-  }
-}
+export default checkWallet;

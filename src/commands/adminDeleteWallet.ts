@@ -1,10 +1,10 @@
-import getWalletAddress from '../utils/getWalletAddress.js';
-import isAdmin from '../utils/isAdmin.js';
-import { deleteWallet } from '../data/deleteWallet.js';
+import getWalletAddress from '../utils/getWalletAddress';
+import isAdmin from '../utils/isAdmin';
+import { deleteWallet } from '../data/deleteWallet';
 import { Message } from 'discord.js';
-import { EventTypes, EventPayload } from '../events/BotEvents.js';
+import { EventPayload } from '../events/BotEvents';
 
-const adminDeleteWallet = async (message: Message) => {
+const processCommand = async (message: Message) => {
   if (!isAdmin(message.author.id)) {
     return message.reply(`Sorry you are not authorised to do that.`);
   }
@@ -25,7 +25,7 @@ const adminDeleteWallet = async (message: Message) => {
   return message.reply(`Deleted ${walletAddress} from my records.`);
 };
 
-const eventCallback = async (payload: EventPayload) => {
+const adminDeleteWallet = async (payload: EventPayload) => {
   if (payload.handled) {
     return;
   }
@@ -35,12 +35,8 @@ const eventCallback = async (payload: EventPayload) => {
     payload.messageLowered.includes('admindeletewallet')
   ) {
     payload.handled = true;
-    return await adminDeleteWallet(payload.message);
+    return await processCommand(payload.message);
   }
 };
 
-export default class AdminDeleteWallet {
-  public static setup(eventEmitter: any): void {
-    eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
-  }
-}
+export default adminDeleteWallet;

@@ -1,12 +1,15 @@
-import SETTINGS from '../../settings.js';
-import sleep from '../../utils/sleep.js';
+import SETTINGS from '../../settings';
+import sleep from '../../utils/sleep';
 // tslint:disable-next-line
 const XRPL = require('xrpl');
 
 const xrplClient = new XRPL.Client(SETTINGS.XRPL.SERVER_URL);
 xrplClient.connect();
 
-const getWalletHoldings = async (address: string, LOGGER: any) => {
+const getWalletHoldings = async (
+  address: string,
+  LOGGER: any
+): Promise<number> => {
   try {
     if (!xrplClient.isConnected()) {
       await xrplClient.connect();

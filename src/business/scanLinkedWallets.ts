@@ -1,8 +1,8 @@
-import sleep from '../utils/sleep.js';
-import { getAllUsers } from '../data/getAllUsers.js';
-import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings.js';
-import { updateUser } from '../data/updateUser.js';
-import { updateUserRoles } from '../integration/discord/updateUserRoles.js';
+import sleep from '../utils/sleep';
+import { getAllUsers } from '../data/getAllUsers';
+import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings';
+import { updateUser } from '../data/updateUser';
+import { updateUserRoles } from '../integration/discord/updateUserRoles';
 import { Client } from 'discord.js';
 
 // Scans user wallets and updates their roles

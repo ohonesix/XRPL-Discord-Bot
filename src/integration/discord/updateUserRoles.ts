@@ -1,4 +1,4 @@
-import SETTINGS from '../../settings.js';
+import SETTINGS from '../../settings';
 import { Client, Role, GuildMember } from 'discord.js';
 
 const updateUserRoles = async (

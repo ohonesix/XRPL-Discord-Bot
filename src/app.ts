@@ -1,4 +1,4 @@
-import SETTINGS from './settings.js';
+import SETTINGS from './settings';
 
 // tslint:disable-next-line
 let appInsights = require('applicationinsights');
@@ -12,9 +12,9 @@ import bodyParser from 'body-parser';
 import { Client, Intents, Message, Interaction } from 'discord.js';
 import EventFactory from './events/EventFactory';
 import { EventTypes } from './events/BotEvents';
-import { scanLinkedWallets } from './business/scanLinkedWallets.js';
-import { scanLinkedAccounts } from './business/scanLinkedAccounts.js';
-import xummWebhook from './integration/xumm/webhook.js';
+import { scanLinkedWallets } from './business/scanLinkedWallets';
+import { scanLinkedAccounts } from './business/scanLinkedAccounts';
+import xummWebhook from './integration/xumm/webhook';
 
 // Discord Client
 const discordClient = new Client({

@@ -1,14 +1,14 @@
 import { Client, Message } from 'discord.js';
-import isAdmin from '../utils/isAdmin.js';
-import truncate from '../utils/truncate.js';
-import getUserNameFromGetWalletCommand from '../utils/getUserNameFromGetWalletCommand.js';
-import { getWalletsForUser } from '../data/getWalletsForUser.js';
-import { getUserAccountIdByUsername } from '../integration/discord/getUserAccountIdByUsername.js';
-import { EventTypes, EventPayload } from '../events/BotEvents.js';
+import isAdmin from '../utils/isAdmin';
+import truncate from '../utils/truncate';
+import getUserNameFromGetWalletCommand from '../utils/getUserNameFromGetWalletCommand';
+import { getWalletsForUser } from '../data/getWalletsForUser';
+import { getUserAccountIdByUsername } from '../integration/discord/getUserAccountIdByUsername';
+import { EventPayload } from '../events/BotEvents';
 
-const getWallet = async (message: Message, client: Client) => {
+const processCommand = async (message: Message, client: Client) => {
   if (!isAdmin(message.author.id)) {
-    return message.reply(`Sorry you are not autorised to do that.`);
+    return message.reply(`Sorry you are not authorised to do that.`);
   }
 
   const usernameParsed = getUserNameFromGetWalletCommand(message.content);
@@ -53,7 +53,7 @@ const getWallet = async (message: Message, client: Client) => {
   return message.reply(result);
 };
 
-const eventCallback = async (payload: EventPayload) => {
+const getWallet = async (payload: EventPayload) => {
   if (payload.handled) {
     return;
   }
@@ -63,12 +63,8 @@ const eventCallback = async (payload: EventPayload) => {
     payload.messageLowered.includes('getwallet')
   ) {
     payload.handled = true;
-    return await getWallet(payload.message, payload.client);
+    return await processCommand(payload.message, payload.client);
   }
 };
 
-export default class GetWallet {
-  public static setup(eventEmitter: any): void {
-    eventEmitter.addListener(EventTypes.MESSAGE, eventCallback);
-  }
-}
+export default getWallet;

@@ -1,20 +1,20 @@
-import getWalletAddress from '../utils/getWalletAddress.js';
+import getWalletAddress from '../utils/getWalletAddress';
 import { Client, User, MessagePayload, MessageOptions } from 'discord.js';
-import { EventTypes, EventPayload } from '../events/BotEvents.js';
-import { linkWalletToDiscordAccount } from '../business/linkWalletToDiscordAccount.js';
-import signIn from '../integration/xumm/signIn.js';
-import SETTINGS from '../settings.js';
+import { EventPayload } from '../events/BotEvents';
+import { linkWalletToDiscordAccount } from '../business/linkWalletToDiscordAccount';
+import signIn from '../integration/xumm/signIn';
+import SETTINGS from '../settings';
 
 const linkWallet = async (
   message: string,
   user: User,
   client: Client,
   LOGGER: any
-): Promise<string> => {
+): Promise<any> => {
   if (SETTINGS.XUMM.ENABLED) {
     const loginResponse = await signIn(user.id);
-    if (loginResponse.signInQrUrl) {
-      return loginResponse.signInQrUrl;
+    if (loginResponse?.signInQrUrl) {
+      return loginResponse;
     }
 
     return null;
@@ -68,11 +68,11 @@ const eventCallbackOnMessage = async (payload: EventPayload) => {
 
     // We have a QR code url to return for the xumm login
     const options: MessageOptions = {
-      content: 'Scan the QR code using your xumm wallet',
+      content: `Scan the QR code using your xumm wallet or visit ${result.signInDirectLink}`,
       embeds: [
         {
           image: {
-            url: result,
+            url: result.signInQrUrl,
           },
         },
       ],
@@ -91,7 +91,7 @@ const eventCallbackOnInteraction = async (payload: EventPayload) => {
   if (payload.interaction.commandName === 'linkwallet') {
     payload.handled = true;
 
-    let result = await linkWallet(
+    const result = await linkWallet(
       payload.interaction.options.getString('wallet-address'),
       payload.interaction.user,
       payload.client,
@@ -109,32 +109,28 @@ const eventCallbackOnInteraction = async (payload: EventPayload) => {
 
     // Error with xumm setup
     if (result === null) {
-      result = 'Error with XUMM, please try again later.';
+      await payload.interaction.reply({
+        content: 'Error with XUMM, please try again later.',
+        ephemeral: true,
+      });
+    } else {
+      // We have a QR code url to return for the xumm login
+      await payload.interaction.reply({
+        content: `Scan the QR code using your xumm wallet or visit ${result.signInDirectLink}`,
+        embeds: [
+          {
+            image: {
+              url: result.signInQrUrl,
+            },
+          },
+        ],
+        ephemeral: true,
+      });
     }
 
-    // We have a QR code url to return for the xumm login
-    await payload.interaction.reply({
-      content: 'Scan the QR code using your xumm wallet',
-      embeds: [
-        {
-          image: {
-            url: result,
-          },
-        },
-      ],
-      ephemeral: true,
-    });
     return;
   }
 };
 
-export default class LinkWallet {
-  public static setup(eventEmitter: any): void {
-    eventEmitter.addListener(EventTypes.MESSAGE, eventCallbackOnMessage);
-
-    eventEmitter.addListener(
-      EventTypes.INTERACTION,
-      eventCallbackOnInteraction
-    );
-  }
-}
+// We have to process each a little differently, so export both
+export { eventCallbackOnMessage, eventCallbackOnInteraction };

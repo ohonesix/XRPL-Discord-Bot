@@ -1,4 +1,4 @@
-import SETTINGS from '../settings.js';
+import SETTINGS from '../settings';
 import mongodb from 'mongodb';
 const { MongoClient } = mongodb;
 

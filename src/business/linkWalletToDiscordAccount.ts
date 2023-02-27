@@ -1,9 +1,9 @@
-import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings.js';
-import { updateUserWallet } from '../data/updateUserWallet.js';
-import { updateUserRoles } from '../integration/discord/updateUserRoles.js';
+import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings';
+import { updateUserWallet } from '../data/updateUserWallet';
+import { updateUserRoles } from '../integration/discord/updateUserRoles';
 import { Client, User } from 'discord.js';
-import truncate from '../utils/truncate.js';
-import { WalletUpdateResponse } from '../models/enum/WalletUpdateResponse.js';
+import truncate from '../utils/truncate';
+import { WalletUpdateResponse } from '../models/enum/WalletUpdateResponse';
 
 const linkWalletToDiscordAccount = async (
   walletAddress: string,
