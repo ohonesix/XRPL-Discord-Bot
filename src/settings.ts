@@ -43,6 +43,10 @@ const SETTINGS = {
     // has a friendly name use that for example 'GEN'). You can get this from your
     // setup trustline url
     TOKEN_HASH: process.env.XRPL_TOKEN_HASH || 'replace-me',
+    // ENABLE_NFT: Turn on tracking NFTs along with tracking the TOKEN_HASH above for points/roles.
+    ENABLE_NFT: process.env.XRPL_ENABLE_NFT === 'true' ? true : false,
+    // NFT_ISSUER_ADDRESS: The wallet address that issued your NFTs e.g. 'rPmKjm8E4nXJbXiH8PVtBPcRHP8UJeZWhQ'.
+    NFT_ISSUER_ADDRESS: process.env.XRPL_NFT_ISSUER_ADDRESS || 'replace-me',
   },
   SOLOGENIC: {
     // API_URL
@@ -57,8 +61,7 @@ const SETTINGS = {
   XUMM: {
     // ENABLED
     // Turn on the ability to link wallets using XUMM
-    // ENABLED: process.env.XUMM_ENABLED === 'true' ? true : false,
-    ENABLED: false,
+    ENABLED: process.env.XUMM_ENABLED === 'true' ? true : false,
     // API_KEY
     // You get this when you create the application in the XUMM Developer Console
     API_KEY: 'replace-me',
