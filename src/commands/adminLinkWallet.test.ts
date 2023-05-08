@@ -2,7 +2,6 @@ import adminLinkWallet from './adminLinkWallet';
 import isAdmin from '../utils/isAdmin';
 import getWalletAddress from '../utils/getWalletAddress';
 import { getWalletHoldings } from '../integration/xrpl/getWalletHoldings';
-import { getUserAccountIdByUsername } from '../integration/discord/getUserAccountIdByUsername';
 import { updateUserWallet } from '../data/updateUserWallet';
 import { updateUserRoles } from '../integration/discord/updateUserRoles';
 import getUserNameFromAdminLinkWalletCommand from '../utils/getUserNameFromAdminLinkWalletCommand';
