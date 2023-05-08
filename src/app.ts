@@ -14,6 +14,7 @@ import EventFactory from './events/EventFactory';
 import { EventTypes } from './events/BotEvents';
 import { scanLinkedWallets } from './business/scanLinkedWallets';
 import { scanLinkedAccounts } from './business/scanLinkedAccounts';
+import { scanFarmingWallets } from './business/scanFarmingWallets';
 import xummWebhook from './integration/xumm/webhook';
 
 // Discord Client
@@ -105,19 +106,22 @@ discordClient.on('ready', async () => {
 
 discordClient.login(SETTINGS.DISCORD.BOT_TOKEN);
 
-// Webserver
+// Webserver setup
 const webServer = express();
 
+// Basic web page to check its up locally
 webServer.get('/', async (req, res) => {
   res.send(
     'The XRPL Discord Bot is running! See <a href="https://github.com/jacobpretorius/XRPL-Discord-Bot">here for updates</a>'
   );
 });
 
+// /status endpoint (useful for automated uptime monitoring)
 webServer.get('/status', async (req, res) => {
   res.send('Ok');
 });
 
+// Endpoints used by CRON task runners
 webServer.get('/updateWallets', async (req, res) => {
   req.setTimeout(9999999);
   const forceRefreshRoles =
@@ -138,6 +142,19 @@ webServer.get('/updateAccounts', async (req, res) => {
   res.send(await scanLinkedAccounts(discordClient, LOGGER));
 });
 
+webServer.get('/updateFarmingWallets', async (req, res) => {
+  if (!SETTINGS.FARMING.ENABLED) {
+    return res.send('ERROR: Farming is currently disabled in settings.ts');
+  }
+
+  req.setTimeout(9999999);
+  const forceRefreshHours =
+    req.query.forceRefreshHours === 'true' ? true : false;
+
+  res.send(await scanFarmingWallets(discordClient, LOGGER, forceRefreshHours));
+});
+
+// Endpoints used by XUMM
 webServer.use('/xummWebhook', bodyParser.json());
 
 webServer.post('/xummWebhook', async (req, res) => {

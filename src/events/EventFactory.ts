@@ -14,6 +14,8 @@ import AdminLinkWalletListener from './listeners/AdminLinkWalletListener';
 import AdminDeleteWalletListener from './listeners/AdminDeleteWalletListener';
 import PriceListener from './listeners/PriceListener';
 import RichlistListener from './listeners/RichlistListener';
+import StartFarmingListener from './listeners/StartFarmingListener';
+import StopFarmingListener from './listeners/StopFarmingListener';
 import AboutListener from './listeners/AboutListener';
 import UnknownListener from './listeners/UnknownListener';
 
@@ -41,6 +43,8 @@ export default class EventFactory {
     LinkWalletListener.setup(this.eventEmitter);
     PriceListener.setup(this.eventEmitter);
     RichlistListener.setup(this.eventEmitter);
+    StartFarmingListener.setup(this.eventEmitter);
+    StopFarmingListener.setup(this.eventEmitter);
     AboutListener.setup(this.eventEmitter);
     UnknownListener.setup(this.eventEmitter);
   }
