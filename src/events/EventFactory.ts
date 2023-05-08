@@ -14,7 +14,7 @@ import AdminLinkWalletListener from './listeners/AdminLinkWalletListener';
 import AdminDeleteWalletListener from './listeners/AdminDeleteWalletListener';
 import PriceListener from './listeners/PriceListener';
 import RichlistListener from './listeners/RichlistListener';
-import StartFarmingListener from './listeners/StartFarmingListener';
+import StartFarmingListener from './listeners/startFarmingListener';
 import StopFarmingListener from './listeners/StopFarmingListener';
 import AboutListener from './listeners/AboutListener';
 import UnknownListener from './listeners/UnknownListener';

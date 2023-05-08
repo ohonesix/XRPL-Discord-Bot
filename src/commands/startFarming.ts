@@ -14,7 +14,7 @@ const processCommand = async (message: Message) => {
 
   // Get user in DB
   const user = await getUserByDiscordId(message.author.id);
-  if (user === null || user.wallets.length === 0) {
+  if (user === null || user?.wallets?.length === 0) {
     return message.reply(
       'Could not find your wallet, please link it first with the "linkwallet" command'
     );
@@ -32,7 +32,7 @@ const processCommand = async (message: Message) => {
 
   // Get the highest holdings tier they qualify for (if any)
   const maxEarnable = getFarmingEarningsMapping(user.totalPoints);
-  if (maxEarnable === null || maxEarnable.farmable === null) {
+  if (maxEarnable === null || maxEarnable?.farmable === null) {
     return message.reply(
       "You don't have enough points to earn anything or you don't have a wallet linked. Please link your wallet or wait and try again later."
     );
@@ -50,7 +50,7 @@ const processCommand = async (message: Message) => {
   );
 
   if (farmingResult !== 0) {
-    return message.reply(`Something went wrong, please contact an admin`);
+    return message.reply('Something went wrong, please contact an admin');
   }
 
   return message.reply(

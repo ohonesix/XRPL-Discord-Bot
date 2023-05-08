@@ -1,7 +1,7 @@
 import { EventTypes } from '../BotEvents';
-import StartFarmingListener from './StartFarmingListener';
 import CustomEmitter from '../CustomEmitter';
 import startFarming from '../../commands/startFarming';
+import StartFarmingListener from './StartFarmingListener';
 
 describe('StartFarmingListener', () => {
   let mockEventEmitter: CustomEmitter;
