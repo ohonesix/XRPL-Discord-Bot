@@ -1,8 +1,11 @@
 import help from './help';
 import { Message } from 'discord.js';
 import isAdmin from '../utils/isAdmin';
+import isFarmingEnabled from '../utils/isFarmingEnabled';
+import SETTINGS from '../settings';
 
 jest.mock('../utils/isAdmin', () => jest.fn());
+jest.mock('../utils/isFarmingEnabled', () => jest.fn());
 
 describe('help command logic', () => {
   let message: Message;
@@ -22,6 +25,9 @@ describe('help command logic', () => {
     };
 
     (isAdmin as jest.MockedFunction<typeof isAdmin>).mockReturnValue(false);
+    (
+      isFarmingEnabled as jest.MockedFunction<typeof isFarmingEnabled>
+    ).mockReturnValue(false);
   });
 
   afterEach(() => {
@@ -71,6 +77,23 @@ describe('help command logic', () => {
     - Get a user's wallet address using: 'getwallet DISCORDUSER#NUMBER'
     - Get a wallet user by address using: 'getuser WALLETADDRESSHERE'
     `;
+
+    await help(payload);
+
+    expect(message.reply).toHaveBeenCalledWith(reply);
+  });
+
+  it('Responds to help message with farming details when farming enabled', async () => {
+    (
+      isFarmingEnabled as jest.MockedFunction<typeof isFarmingEnabled>
+    ).mockReturnValue(true);
+
+    const reply = `You can
+  - Link a wallet to your account using: 'linkwallet WALLETADDRESSHERE'
+  - Check wallet points using: 'checkwallet WALLETADDRESSHERE'
+  - Start farming for ${SETTINGS.FARMING.EARNINGS_NAME}: 'start farming'
+  - Check farming progress: 'check farming'
+  - Delete farming progress: 'stop farming'`;
 
     await help(payload);
 

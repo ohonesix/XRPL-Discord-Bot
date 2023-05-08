@@ -1,12 +1,20 @@
 import isAdmin from '../utils/isAdmin';
 import { Message } from 'discord.js';
 import { EventPayload } from '../events/BotEvents';
+import SETTINGS from '../settings';
+import isFarmingEnabled from '../utils/isFarmingEnabled';
 
 const processCommand = async (message: Message) => {
   let reply = `You can
   - Link a wallet to your account using: 'linkwallet WALLETADDRESSHERE'
   - Check wallet points using: 'checkwallet WALLETADDRESSHERE'
   `;
+
+  if (isFarmingEnabled()) {
+    reply += `- Start farming for ${SETTINGS.FARMING.EARNINGS_NAME}: 'start farming'
+  - Check farming progress: 'check farming'
+  - Delete farming progress: 'stop farming'`;
+  }
 
   if (isAdmin(message.author.id)) {
     reply += `\nAdmin commands
