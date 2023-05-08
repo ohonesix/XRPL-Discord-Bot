@@ -51,6 +51,10 @@ const commands = [
     name: 'price',
     description: 'Shows the last trading price on Sologenic 💲',
   },
+  {
+    name: 'richlist',
+    description: 'Shows the top 10 community members 🙌',
+  },
 ];
 
 const rest = new REST({ version: '9' }).setToken(SETTINGS.DISCORD.BOT_TOKEN);
