@@ -14,7 +14,7 @@ const getUserNameFromAdminLinkWalletCommand = (
 
   return {
     username: username.split('#')[0],
-    tag: username.split('#')[1],
+    tag: username.split('#')[1] ?? '0',
   };
 };
 

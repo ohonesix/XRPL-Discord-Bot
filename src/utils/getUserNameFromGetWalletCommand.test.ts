@@ -23,4 +23,22 @@ describe('getUserNameFromGetWalletCommand util', () => {
       tag: '1234',
     });
   });
+  it('should return an object with username with new format', () => {
+    expect(getUserNameFromGetWalletCommand('getwallet user')).toEqual({
+      username: 'user',
+      tag: '0',
+    });
+    expect(getUserNameFromGetWalletCommand('Getwallet user')).toEqual({
+      username: 'user',
+      tag: '0',
+    });
+    expect(getUserNameFromGetWalletCommand('get wallet user')).toEqual({
+      username: 'user',
+      tag: '0',
+    });
+    expect(getUserNameFromGetWalletCommand('Get wallet user')).toEqual({
+      username: 'user',
+      tag: '0',
+    });
+  });
 });

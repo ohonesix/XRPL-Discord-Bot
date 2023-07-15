@@ -19,4 +19,12 @@ describe('getUserNameFromAdminLinkWalletCommand util', () => {
       )
     ).toEqual({ username: 'user', tag: '1234' });
   });
+  it('should return an object with username and tag with new format', () => {
+    expect(
+      getUserNameFromAdminLinkWalletCommand(
+        'adminlinkwallet rnruxxaTbJUMNtFNBJ7X2xSiy1KE7ajUuH user',
+        'rnruxxaTbJUMNtFNBJ7X2xSiy1KE7ajUuH'
+      )
+    ).toEqual({ username: 'user', tag: '0' });
+  });
 });
